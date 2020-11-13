@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "dingo/api": "^3.0",
         "laravel/framework": "~8.0"
     },
     "autoload": {
