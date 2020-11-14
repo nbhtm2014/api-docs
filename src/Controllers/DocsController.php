@@ -7,8 +7,6 @@
 namespace Szkj\ApiDocs\Controllers;
 
 use Dingo\Api\Routing\Router;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\FileCacheReader;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -48,7 +46,7 @@ class DocsController extends Controller
             if ($ref->hasMethod($controllerMethod)) {
 //                $method = $ref->getMethod($controllerMethod);
 //                $reader = new AnnotationReader();
-                //                dd($reader->getMethodAnnotation($method,Title::class));
+//                dd($reader->getMethodAnnotation($method,Title::class));
                 $parameters = $ref->getMethod($controllerMethod)->getParameters();
                 foreach ($parameters as $parameter) {
                     $name = $parameter->name;
@@ -56,12 +54,12 @@ class DocsController extends Controller
                         $parameter_class_name = $parameter_class->isInstance(new Request());
                         if (!$parameter_class_name) {
                             $a = $parameter->getClass()->getMethod('rules')->class;
-                            $request[$v->uri.'@'.$controllerMethod] =(new $a())->rules();
-                        }else{
-                            $request[$v->uri.'@'.$controllerMethod][] =[];
+                            $request[$v->uri . '@' . $controllerMethod] = (new $a())->rules();
+                        } else {
+                            $request[$v->uri . '@' . $controllerMethod][] = [];
                         }
-                    }else{
-                        $request[$v->uri.'@'.$controllerMethod] = [$name=>'required'];
+                    } else {
+                        $request[$v->uri . '@' . $controllerMethod] = [$name => 'required'];
                     }
                 }
             }
