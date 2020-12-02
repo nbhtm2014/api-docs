@@ -10,7 +10,8 @@
     ],
     "require": {
         "dingo/api": "^3.0",
-        "laravel/framework": "~8.0"
+        "laravel/framework": "~8.0",
+        "doctrine/annotations": "^1.11"
     },
     "autoload": {
         "psr-4": {
