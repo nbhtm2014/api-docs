@@ -90,7 +90,7 @@
         var uri;
         var data = {};
         var token = $('#token').val();
-        console.log(token)
+        var form;
         $.each(t, function (i, val) {
             if (val.name == 'uri') {
                 uri = val.value
@@ -104,10 +104,10 @@
         })
         t.splice(indexUri, 1)
         t.splice(indexMethod, 1)
-
-        data =  JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
-
-        console.log(data)
+        form = t
+        if (method == 'POST' || method == 'post'){
+            form = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
+        }
         $.ajax({
             headers: {
                 "Authorization": "Bearer " + token
@@ -115,7 +115,7 @@
             type: method,
             url: uri,
             dataType: 'json',
-            data: data,
+            data: form,
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
