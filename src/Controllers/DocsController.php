@@ -77,7 +77,7 @@ class DocsController extends Controller
                             $request[$v->uri . '@' . $controllerMethod]['request'] = [];
                         }
                     } else {
-                        $request[$v->uri . '@' . $controllerMethod]['request'][] = [$name => 'required'];
+                        $request[$v->uri . '@' . $controllerMethod]['request'] = [$name => 'required'];
                     }
                 }
             }
