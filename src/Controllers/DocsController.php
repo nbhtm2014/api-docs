@@ -12,8 +12,10 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\Unique;
+use PhpAmqpLib\Package;
 use Szkj\ApiDocs\Annotation\Title;
 use Tymon\JWTAuth\JWTAuth;
 
@@ -30,7 +32,6 @@ class DocsController extends Controller
      */
     public function __construct(Router $router)
     {
-
         $this->router = $router;
     }
 
@@ -44,8 +45,9 @@ class DocsController extends Controller
 
         $request = [];
 
-        foreach ($routes as $k => $v) {
+        $api_group = [];
 
+        foreach ($routes as $k => $v) {
             $controller = get_class($v->controller);
             $controllerMethod = $v->controllerMethod;
 
@@ -60,11 +62,16 @@ class DocsController extends Controller
                 );
                 $annotation = [];
                 //TODO 获取该方法的所有注释 目前只获取 title
+
                 foreach ($myAnnotation as $key => $vv) {
                     $annotation['title'] = $vv->title;
+                    $annotation['desc'] = $vv->desc;
                 }
                 $request[$v->uri . '@' . $controllerMethod]['annotation'] = $annotation;
                 $parameters = $ref->getMethod($controllerMethod)->getParameters();
+                //创建分组
+                $group = explode('/', $v->uri);
+                $api_group[$group[0]][$group[1]] = [];
                 //开始遍历 parameters 获取参数
                 foreach ($parameters as $parameter) {
                     $name = $parameter->name;
@@ -86,11 +93,28 @@ class DocsController extends Controller
         try {
             $superadmin = DB::table('users')->where('superadmin', 1)->first()->id;
             $token = auth()->guard('api')->tokenById($superadmin);
-        }catch (\Exception $exception){
+        } catch (\Exception $exception) {
             $token = '';
         }
-        return view('szkj::index', ['token'=>$token, 'version' => $version, 'request' => $request]);
+        $api_group = $this->group($api_group, $request);
+        return view('szkj::index', ['token' => $token, 'version' => $version, 'request' => $request]);
     }
+
+    /**
+     * @param $api_group
+     * @param $request
+     * @return array
+     */
+    public function group($api_group, $request) : array
+    {
+        foreach ($request as $key => $value) {
+            $uri = explode('@', $key);
+            $array_uri = explode('/', $uri[0]);
+            $api_group[$array_uri[0]][$array_uri[1]][$key] =  $value;
+        }
+        return $api_group;
+    }
+
 
     public function re($routes, $request)
     {
@@ -121,9 +145,7 @@ class DocsController extends Controller
                 if (!is_array($v)) $array[$k] = explode('|', $v);
             }
         }
-
         return $array;
-//        dd($array);
     }
 
     //处理对象参数
@@ -131,10 +153,10 @@ class DocsController extends Controller
     {
         foreach ($array as $k => $v) {
             if (is_object($v)) {
-                if ($v instanceof In){
+                if ($v instanceof In) {
                     $array[$k] = $v->__toString();
                 }
-                if ($v instanceof Unique){
+                if ($v instanceof Unique) {
                     $array[$k] = $v->__toString();
                 }
             }

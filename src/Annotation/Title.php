@@ -16,4 +16,10 @@ class Title
      * @var string
      */
     public $title;
+
+
+    /**
+     * @var string
+     */
+    public $desc;
 }

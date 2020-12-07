@@ -33,25 +33,32 @@
             @if(isset( $value['annotation']['title']))
                 <text style="font-size: 30px;font-weight:500;margin-right: 20px">{{ $value['annotation']['title'] }}</text>
             @endif
+
             <span class="label label-{{ $value['enabled'] ? 'success' : 'danger' }}">{{ $value['enabled'] ? '启用' : '未定义' }}</span>
+        </div>
+        <div>
+            @if(isset( $value['annotation']['desc']))
+                <strong>{{ $value['annotation']['desc'] }}</strong>
+            @endif
         </div>
         {{--接口地址--}}
         <div>
             <p><kbd>{{ $key }}</kbd></p>
         </div>
+
+        <div>
+            <select name="method" id="{{ $value['index'] }}_method">
+                @if(isset($value['methods']))
+                    @foreach($value['methods'] as $k=>$v)
+                        <option value="{{$v}}">{{$v}}</option>
+                    @endforeach
+                @endif
+            </select>
+            <input type="text" name="uri" value="{{$value['uri']}}" id="{{ $value['index'] }}_uri">
+            <a href="javascript:void(0);" onclick="js_method('{{$value['index']}}')" class="btn btn-default btn-xs"
+               role="button">提交</a>
+        </div>
         <form id="{{ $value['index'] }}">
-            <div>
-                <select name="method">
-                    @if(isset($value['methods']))
-                        @foreach($value['methods'] as $k=>$v)
-                            <option value="{{$v}}">{{$v}}</option>
-                        @endforeach
-                    @endif
-                </select>
-                <input type="text" name="uri" value="{{$value['uri']}}">
-                <a href="javascript:void(0);" onclick="js_method('{{$value['index']}}')" class="btn btn-default btn-xs"
-                   role="button">提交</a>
-            </div>
             @if(!empty($value['request']))
                 <div>
                     <table class="table table-bordered table-hover ">
@@ -83,30 +90,24 @@
 </div>
 <script>
     function js_method(id) {
-        var t = $('#' + id).serializeArray()
-        var method;
-        var indexMethod;
-        var indexUri;
-        var uri;
-        var data = {};
+        var form = $('#' + id).serializeArray()
+        var method = $('#'+ id +'_method').val();
+        var uri = $('#'+ id +'_uri').val();
         var token = $('#token').val();
-        var form;
-        $.each(t, function (i, val) {
-            if (val.name == 'uri') {
-                uri = val.value
-                indexUri = i
-            } else if (val.name == "method") {
-                method = val.value
-                indexMethod = i
-            } else if (val.value != '' && val.value != ' ') {
-                data[val.name] = val.value;
-            }
-        })
-        t.splice(indexUri, 1)
-        t.splice(indexMethod, 1)
-        form = t
+        var data = {};
         if (method == 'POST' || method == 'post'){
-            form = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
+            $.each(form, function (i, val) {
+                console.log(val)
+                if (val.value != '' && val.value != ' ') {
+                    data[val.name] = val.value;
+                }
+            })
+            data = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
+        }else if(method == 'PUT' || method == 'put'){
+            data = $('#' + id).serialize()
+            uri = uri + '?' + data
+        }else{
+            data = form
         }
         $.ajax({
             headers: {
@@ -115,7 +116,7 @@
             type: method,
             url: uri,
             dataType: 'json',
-            data: form,
+            data: data,
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
