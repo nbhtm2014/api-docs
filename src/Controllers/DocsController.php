@@ -12,11 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\Unique;
 use PhpAmqpLib\Package;
-use Szkj\ApiDocs\Annotation\Title;
 use Tymon\JWTAuth\JWTAuth;
 
 class DocsController extends Controller
@@ -73,18 +71,25 @@ class DocsController extends Controller
                 $group = explode('/', $v->uri);
                 $api_group[$group[0]][$group[1]] = [];
                 //开始遍历 parameters 获取参数
+
                 foreach ($parameters as $parameter) {
+
                     $name = $parameter->name;
                     if ($parameter_class = $parameter->getClass()) {
                         $parameter_class_name = $parameter_class->isInstance(new Request());
                         if (!$parameter_class_name) {
+
                             $a = $parameter->getClass()->getMethod('rules')->class;
+
                             $request[$v->uri . '@' . $controllerMethod]['request'] = (new $a())->rules();
                         } else {
+
                             $request[$v->uri . '@' . $controllerMethod]['request'] = [];
                         }
                     } else {
-                        $request[$v->uri . '@' . $controllerMethod]['request'] = [$name => 'required'];
+                        if (!isset($request[$v->uri . '@' . $controllerMethod]['request'])){
+                            $request[$v->uri . '@' . $controllerMethod]['request'] = [$name => 'required'];
+                        }
                     }
                 }
             }
