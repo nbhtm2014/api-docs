@@ -12,9 +12,9 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\Unique;
-use PhpAmqpLib\Package;
 use Tymon\JWTAuth\JWTAuth;
 
 class DocsController extends Controller
