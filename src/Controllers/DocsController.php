@@ -78,12 +78,9 @@ class DocsController extends Controller
                     if ($parameter_class = $parameter->getClass()) {
                         $parameter_class_name = $parameter_class->isInstance(new Request());
                         if (!$parameter_class_name) {
-
                             $a = $parameter->getClass()->getMethod('rules')->class;
-
                             $request[$v->uri . '@' . $controllerMethod]['request'] = (new $a())->rules();
                         } else {
-
                             $request[$v->uri . '@' . $controllerMethod]['request'] = [];
                         }
                     } else {
@@ -102,7 +99,7 @@ class DocsController extends Controller
             $token = '';
         }
         $api_group = $this->group($api_group, $request);
-        return view('szkj::index', ['token' => $token, 'version' => $version, 'request' => $request]);
+        return view('szkj::index', ['group'=>$api_group,'token' => $token, 'version' => $version, 'request' => $request]);
     }
 
     /**

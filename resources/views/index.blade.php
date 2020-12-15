@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
 
-    <title>laravel api docs</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
 
     <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
@@ -19,101 +19,248 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+    <style>
+
+        ul li {
+            padding-top: 0px;
+            padding-bottom: 0px;
+            padding-left: 30px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1px;
+        }
+    </style>
 </head>
+
 <body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-3" role="complementary">
+            @foreach($group as $k=>$v)
+                <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
+                    <ul class="nav bs-docs-sidenav">
+                        <li class=><a href="#{{$k}}">{{$k}}</a>
+                            @if(!empty($v))
+                                <ul class="nav">
+                                    @foreach($v as $key=>$value)
+                                        <li class><a href="#{{ $key }}">{{$key}}<span style="margin-left: 5px" class="badge">{{count($value)}}</span></a>
+                                            @if(!empty($value))
+                                                <ul class="nav" style="display: none">
+                                                    @foreach($value as $kk=>$vv)
+                                                        <li class><a href="#{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</a>
+                                                        </li>
+                                                    @endforeach
 
-<div class="col-lg-8">
-    <h2> api.version = {{$version}} </h2>
-    <label for="token">jwt-token</label>
-    <input type="text" id="token" value="{{ $token }}">
-    @foreach($request as $key=>$value)
-        {{--        {{ var_dump($value) }}--}}
-        {{--接口标题 --}}
-        <div style="margin-bottom: 10px">
-            @if(isset( $value['annotation']['title']))
-                <text style="font-size: 30px;font-weight:500;margin-right: 20px">{{ $value['annotation']['title'] }}</text>
-            @endif
+                                                </ul>
+                                            @endif
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+                        </li>
+                    </ul>
+                    @endforeach
+                </nav>
+        </div>
+        <div class="col-xs-8" role="main">
+            <input hidden id="token" value="{{ $token }}">
+            @foreach($group as $k=>$v)
+                <h1 id="{{$k}}">{{$k}}</h1>
+                @if(!empty($v))
+                    @foreach($v as $key=>$value)
+                        <div class="bs-docs-section">
+                            <h2 id="{{ $key }}">{{$key}}</h2>
+                            @if(!empty($value))
+                                @foreach($value as $kk=>$vv)
+                                    <h3 id="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</h3>
+                                    @if(isset($vv['annotation']['desc']))
+                                        <blockquote>
+                                            <footer>{{$vv['annotation']['desc']}}</footer>
+                                        </blockquote>
+                                    @endif
+                                    <p><kbd>{{$kk}}</kbd>
+                                        <span class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
+                                    </p>
+                                    <div>
+                                        <select name="method" id="{{ $vv['index'] }}_method">
+                                            @if(isset($vv['methods']))
+                                                @foreach($vv['methods'] as $kkk=>$vvv)
+                                                    <option value="{{$vvv}}">{{$vvv}}</option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <input type="text" name="uri" value="{{$vv['uri']}}"
+                                               id="{{ $vv['index'] }}_uri">
+                                        <a href="javascript:void(0);" onclick="js_method('{{$vv['index']}}')"
+                                           class="btn btn-default btn-xs"
+                                           role="button">提交</a>
+                                    </div>
+                                    <form id="{{ $vv['index'] }}">
+                                        @if(!empty($vv['request']))
+                                            <div>
+                                                <table class="table table-bordered table-hover ">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>参数</th>
+                                                        <th>是否必填</th>
+                                                        <th>规则</th>
+                                                        <th>传参</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($vv['request'] as $kkk=>$vvv)
+                                                        <tr>
+                                                            <td>{{ $kkk }}</td>
+                                                            <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
+                                                            <td>{{ implode(' | ',$vvv) }}</td>
+                                                            <td><input name="{{ $kkk }}" type="text"
+                                                                       data-key="{{ $kkk }}"></td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        @endif
+                                    </form>
 
-            <span class="label label-{{ $value['enabled'] ? 'success' : 'danger' }}">{{ $value['enabled'] ? '启用' : '未定义' }}</span>
-        </div>
-        <div>
-            @if(isset( $value['annotation']['desc']))
-                <strong>{{ $value['annotation']['desc'] }}</strong>
-            @endif
-        </div>
-        {{--接口地址--}}
-        <div>
-            <p><kbd>{{ $key }}</kbd></p>
-        </div>
-
-        <div>
-            <select name="method" id="{{ $value['index'] }}_method">
-                @if(isset($value['methods']))
-                    @foreach($value['methods'] as $k=>$v)
-                        <option value="{{$v}}">{{$v}}</option>
+                                    <div style="margin-top: 30px" id="collapse_{{ $vv['index'] }}" hidden>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                       href="#collapse{{$vv['index']}}" aria-expanded="true"
+                                                       aria-controls="collapseOne">
+                                                        #Collapse
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse{{$vv['index']}}" class="panel-collapse collapse in"
+                                                 role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                        <pre style="color: #ffffff;background-color: #333333;" class="language-php" data-lang="php"
+                                             id="pre_{{ $vv['index'] }}">
+                                        </pre>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
                     @endforeach
                 @endif
-            </select>
-            <input type="text" name="uri" value="{{$value['uri']}}" id="{{ $value['index'] }}_uri">
-            <a href="javascript:void(0);" onclick="js_method('{{$value['index']}}')" class="btn btn-default btn-xs"
-               role="button">提交</a>
+            @endforeach
         </div>
-        <form id="{{ $value['index'] }}">
-            @if(!empty($value['request']))
-                <div>
-                    <table class="table table-bordered table-hover ">
-                        <thead>
-                        <tr>
-                            <th>参数</th>
-                            <th>是否必填</th>
-                            <th>规则</th>
-                            <th>传参</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @foreach($value['request'] as $k=>$v)
-                            <tr>
-                                <td>{{ $k }}</td>
-                                <td>{{ in_array('required',$v) ? '是':'否'}}</td>
-                                <td>{{ implode(' | ',$v) }}</td>
-                                <td><input name="{{ $k }}" type="text" data-key="{{ $k }}"></td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            @endif
-        </form>
-        <pre style="color: #ffffff;background-color: #333333;margin-top: 20px;" hidden id="pre_{{ $value['index'] }}"></pre>
-        <hr>
-    @endforeach
+    </div>
 </div>
+
+</body>
 <script>
+    $(document).ready(function () {
+
+        $('.nav ul li a').click(function () {
+            var first_li = $(this).parents('li').first();
+            var ul = first_li.children("ul")
+            ul.toggle();
+        })
+
+    });
+
     function js_method(id) {
         var form = $('#' + id).serializeArray()
-        var method = $('#'+ id +'_method').val();
-        var uri = $('#'+ id +'_uri').val();
+        var method = $('#' + id + '_method').val().toUpperCase();
+        var uri = $('#' + id + '_uri').val();
         var token = $('#token').val();
         var data = {};
-        if (method == 'POST' || method == 'post'){
-            $.each(form, function (i, val) {
-                console.log(val)
-                if (val.value != '' && val.value != ' ') {
-                    data[val.name] = val.value;
-                }
-            })
-            data = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
-        }else if(method == 'PUT' || method == 'put'){
-            data = $('#' + id).serialize()
+        window[method](uri, token, form, id)
+    }
+
+    function PUT(uri, token, form, id) {
+        var data = '';
+        $.each(form, function (i, v) {
+            if (v.value != '') {
+                data += v.name + '=' + v.value + '&'
+            }
+        })
+        if (data != '') {
+            data = data.substring(0, data.length - 1)
             uri = uri + '?' + data
-        }else{
-            data = form
         }
         $.ajax({
             headers: {
                 "Authorization": "Bearer " + token
             },
-            type: method,
+            url: uri,
+            type: 'put',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: 'application/json;charset=UTF-8',
+            success: function (r) {
+                var pre = $('#pre_' + id);
+                pre.html(syntaxHighlight(r));
+            },
+            error: function (r) {
+                var j = r.responseJSON;
+                var pre = $('#pre_' + id);
+                pre.html(syntaxHighlight(j));
+            },
+            complete: function (r) {
+                var collapse = $('#collapse_' + id);
+                collapse.show()
+            }
+        })
+    }
+
+    function DELETE(uri, token, form, id) {
+        var data = '';
+        $.each(form, function (i, v) {
+            if (v.value != '') {
+                data += v.name + '=' + v.value + '&'
+            }
+        })
+        if (data != '') {
+            data = data.substring(0, data.length - 1)
+            uri = uri + '?' + data
+        }
+        $.ajax({
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            url: uri,
+            type: 'delete',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: 'application/json;charset=UTF-8',
+            success: function (r) {
+                var pre = $('#pre_' + id);
+                pre.html(syntaxHighlight(r));
+            },
+            error: function (r) {
+                var j = r.responseJSON;
+                var pre = $('#pre_' + id);
+                pre.html(syntaxHighlight(j));
+            },
+            complete: function (r) {
+                var collapse = $('#collapse_' + id);
+                collapse.show()
+            }
+        })
+    }
+
+    function POST(uri, token, form, id) {
+        var data = {}
+        $.each(form, function (i, val) {
+            if (val.value != '' && val.value != ' ') {
+                data[val.name] = val.value;
+            }
+        })
+        data = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
+        $.ajax({
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            type: 'post',
             url: uri,
             dataType: 'json',
             data: data,
@@ -122,13 +269,51 @@
             success: function (r) {
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
-                pre.show()
             },
             error: function (r) {
                 var j = r.responseJSON;
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(j));
-                pre.show()
+            },
+            complete: function (r) {
+                var collapse = $('#collapse_' + id);
+                collapse.show()
+            }
+        })
+    }
+
+    function GET(uri, token, form, id) {
+        var data = '';
+        $.each(form, function (i, v) {
+            if (v.value != '') {
+                data += v.name + '=' + v.value + '&'
+            }
+        })
+        if (data != '') {
+            data = data.substring(0, data.length - 1)
+            uri = uri + '?' + data
+        }
+        $.ajax({
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            url: uri,
+            type: 'get',
+            dataType: 'json',
+            mimeType: "multipart/form-data",
+            contentType: 'application/json;charset=UTF-8',
+            success: function (r) {
+                var pre = $('#pre_' + id);
+                pre.html(syntaxHighlight(r));
+            },
+            error: function (r) {
+                var j = r.responseJSON;
+                var pre = $('#pre_' + id);
+                pre.html(syntaxHighlight(j));
+            },
+            complete: function (r) {
+                var collapse = $('#collapse_' + id);
+                collapse.show()
             }
         })
     }
@@ -154,6 +339,6 @@
             return '<span class="' + cls + '">' + match + '</span>';
         });
     }
+
 </script>
-</body>
 </html>
