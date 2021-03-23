@@ -93,8 +93,8 @@ class DocsController extends Controller
         }
         $request = $this->re($routes, $request);
         try {
-            $superadmin = DB::table('users')->where('superadmin', 1)->first()->id;
-            $token = auth()->guard('api')->tokenById($superadmin);
+            $user = DB::table('users')->first()->id;
+            $token = auth()->guard(config('auth.defaults.guard'))->tokenById($user);
         } catch (\Exception $exception) {
             $token = '';
         }
