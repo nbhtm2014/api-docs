@@ -43,11 +43,13 @@
                             @if(!empty($v))
                                 <ul class="nav">
                                     @foreach($v as $key=>$value)
-                                        <li class><a href="#{{ $key }}">{{$key}}<span style="margin-left: 5px" class="badge">{{count($value)}}</span></a>
+                                        <li class><a href="#{{ $key }}">{{$key}}<span style="margin-left: 5px"
+                                                                                      class="badge">{{count($value)}}</span></a>
                                             @if(!empty($value))
                                                 <ul class="nav" style="display: none">
                                                     @foreach($value as $kk=>$vv)
-                                                        <li class><a href="#{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</a>
+                                                        <li class><a
+                                                                href="#{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</a>
                                                         </li>
                                                     @endforeach
 
@@ -79,7 +81,8 @@
                                         </blockquote>
                                     @endif
                                     <p><kbd>{{$kk}}</kbd>
-                                        <span class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
+                                        <span
+                                            class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
                                     </p>
                                     <div>
                                         <select name="method" id="{{ $vv['index'] }}_method">
@@ -117,6 +120,16 @@
                                                                        data-key="{{ $kkk }}"></td>
                                                         </tr>
                                                     @endforeach
+                                                    @if(in_array('confirmed',$vvv))
+                                                        <tr>
+                                                            <td>{{ $kkk.'_confirmed' }}</td>
+                                                            <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
+                                                            <td></td>
+                                                            <td><input name="{{ $kkk.'_confirmed' }}" type="text"
+                                                                       data-key="{{ $kkk.'_confirmed' }}"></td>
+
+                                                        </tr>
+                                                    @endif
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -137,7 +150,8 @@
                                             <div id="collapse{{$vv['index']}}" class="panel-collapse collapse in"
                                                  role="tabpanel" aria-labelledby="headingOne">
                                                 <div class="panel-body">
-                                        <pre style="color: #ffffff;background-color: #333333;" class="language-php" data-lang="php"
+                                        <pre style="color: #ffffff;background-color: #333333;" class="language-php"
+                                             data-lang="php"
                                              id="pre_{{ $vv['index'] }}">
                                         </pre>
                                                 </div>
