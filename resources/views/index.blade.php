@@ -119,17 +119,18 @@
                                                             <td><input name="{{ $kkk }}" type="text"
                                                                        data-key="{{ $kkk }}"></td>
                                                         </tr>
-                                                    @endforeach
-                                                    @if(in_array('confirmed',$vvv))
-                                                        <tr>
-                                                            <td>{{ $kkk.'_confirmation' }}</td>
-                                                            <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
-                                                            <td></td>
-                                                            <td><input name="{{ $kkk.'_confirmation' }}" type="text"
-                                                                       data-key="{{ $kkk.'_confirmation' }}"></td>
+                                                        @if(in_array('confirmed',$vvv))
+                                                            <tr>
+                                                                <td>{{ $kkk.'_confirmation' }}</td>
+                                                                <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
+                                                                <td></td>
+                                                                <td><input name="{{ $kkk.'_confirmation' }}" type="text"
+                                                                           data-key="{{ $kkk.'_confirmation' }}"></td>
 
-                                                        </tr>
-                                                    @endif
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+
                                                     </tbody>
                                                 </table>
                                             </div>
