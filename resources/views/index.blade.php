@@ -202,8 +202,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr>
                                     </div>
+                                    <hr>
                                 @endforeach
                             @endif
                         </div>
