@@ -45,6 +45,10 @@ class DocsController extends Controller
 
         $api_group = [];
 
+
+
+        $tokens = $this->getToken();
+
         foreach ($routes as $k => $v) {
             $controller = get_class($v->controller);
             $controllerMethod = $v->controllerMethod;
@@ -90,11 +94,31 @@ class DocsController extends Controller
         $host = request()->getSchemeAndHttpHost() . '/';
         $request = $this->re($routes, $request);
         $api_group = $this->group($api_group, $request);
-        return view('szkj::index', ['group' => $api_group, 'host' => $host, 'version' => $version, 'request' => $request]);
+        return view('szkj::index', ['group' => $api_group, 'tokens'=>$tokens, 'host' => $host, 'version' => $version, 'request' => $request]);
     }
 
 
-
+    /**
+     * @return array
+     * @author htm
+     * date 2021-03-25 15:45:13
+     */
+    public function getToken(){
+        $tokens = [];
+        $guards = config('auth.guards');
+        foreach ($guards as $k=>$v){
+            if ($v['driver'] == 'jwt'){
+                $model = config('auth.providers.'.$v['provider'].'.model');
+                $user = (new $model())->first();
+                if (!empty($user)){
+                    $tokens[$v['provider']] = auth($k)->fromUser($user);
+                }else{
+                    $tokens[$v['provider']]  = '';
+                }
+            }
+        }
+        return $tokens;
+    }
 
 
     /**

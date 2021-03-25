@@ -210,10 +210,42 @@
                     @endforeach
                 @endif
             @endforeach
+            <button style="position: fixed;z-index: 214783647;bottom: 20px;right: 20px;"
+                    type="button"
+                    class="btn btn-primary btn-lg"
+                    data-toggle="modal"
+                    data-target="#getToken">
+                token
+            </button>
+            <!-- Modal -->
+            <div class="modal fade" id="getToken" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Get Token</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                @foreach($tokens as $tokenKey => $tokenValue)
+                                    <div class="form-group">
+                                        <label for="message-text" class="control-label">{{$tokenKey}}</label>
+                                        <textarea class="form-control" id="message-text"
+                                                  rows="5">{{$tokenValue}}</textarea>
+                                    </div>
+                                @endforeach
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-
 </body>
 <script>
     $(document).ready(function () {
