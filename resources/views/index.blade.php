@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
@@ -65,7 +66,7 @@
                 </nav>
         </div>
         <div class="col-xs-8" role="main">
-            <input hidden id="token" value="{{ $token }}">
+            {{--            <input hidden id="token" value="{{ $token }}">--}}
             @foreach($group as $k=>$v)
                 <h1 id="{{$k}}">{{$k}}</h1>
                 @if(!empty($v))
@@ -84,24 +85,49 @@
                                         <span
                                             class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
                                     </p>
-                                    <div>
-                                        <select name="method" id="{{ $vv['index'] }}_method">
-                                            @if(isset($vv['methods']))
-                                                @foreach($vv['methods'] as $kkk=>$vvv)
-                                                    <option value="{{$vvv}}">{{$vvv}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <input type="text" name="uri" value="{{$vv['uri']}}"
-                                               id="{{ $vv['index'] }}_uri">
-                                        <a href="javascript:void(0);" onclick="js_method('{{$vv['index']}}')"
-                                           class="btn btn-default btn-xs"
-                                           role="button">提交</a>
+                                    <div class="row">
+                                        <div class="col-xs-2">
+                                            <select class="form-control" name="method" id="{{ $vv['index'] }}_method">
+                                                @if(isset($vv['methods']))
+                                                    @foreach($vv['methods'] as $kkk=>$vvv)
+                                                        <option value="{{$vvv}}">{{$vvv}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                        <div class="col-xs-5">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" id="basic-addon3">{{ $host }}</span>
+                                                <input type="text" name="uri" value="{{$vv['uri']}}"
+                                                       class="form-control"
+                                                       aria-describedby="sizing-addon2"
+                                                       id="{{ $vv['index'] }}_uri">
+                                            </div>
+                                        </div>
+                                        <div class="col-xs-1">
+                                            <a href="javascript:void(0);" onclick="js_method('{{$vv['index']}}')"
+                                               class="btn btn-info "
+                                               role="button">提交</a>
+                                        </div>
                                     </div>
+                                    <p></p>
                                     <form id="{{ $vv['index'] }}">
-                                        @if(!empty($vv['request']))
-                                            <div>
-                                                <table class="table table-bordered table-hover ">
+                                        {{--                                        @if(!empty($vv['request']))--}}
+                                        <ul id="tab" class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#body-table-{{ $vv['index'] }}" data-toggle="tab">
+                                                    Body
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#header-table-{{ $vv['index'] }}" data-toggle="tab">
+                                                    Headers
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div id="tabConten" class="tab-content">
+                                            <div class="tab-pane fade in active" id="body-table-{{ $vv['index'] }}">
+                                                <table class="table  table-hover ">
                                                     <thead>
                                                     <tr>
                                                         <th>参数</th>
@@ -116,7 +142,7 @@
                                                             <td>{{ $kkk }}</td>
                                                             <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
                                                             <td>{{ implode(' | ',$vvv) }}</td>
-                                                            <td><input name="{{ $kkk }}" type="text"
+                                                            <td><input class="" name="{{ $kkk }}" type="text"
                                                                        data-key="{{ $kkk }}"></td>
                                                         </tr>
                                                         @if(in_array('confirmed',$vvv))
@@ -130,11 +156,29 @@
                                                             </tr>
                                                         @endif
                                                     @endforeach
-
                                                     </tbody>
                                                 </table>
                                             </div>
-                                        @endif
+                                            <div class="tab-pane fade in" id="header-table-{{ $vv['index'] }}">
+                                                <table class="table  table-hover ">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>KEY</th>
+                                                        <th>VALUE</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Authorization</td>
+                                                        <td><input class="form-control" type="text"
+                                                                   name="authorization"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                        {{--                                        @endif--}}
                                     </form>
 
                                     <div style="margin-top: 30px" id="collapse_{{ $vv['index'] }}" hidden>
@@ -144,7 +188,7 @@
                                                     <a role="button" data-toggle="collapse" data-parent="#accordion"
                                                        href="#collapse{{$vv['index']}}" aria-expanded="true"
                                                        aria-controls="collapseOne">
-                                                        #Collapse
+                                                        Response
                                                     </a>
                                                 </h4>
                                             </div>
@@ -184,9 +228,14 @@
 
     function js_method(id) {
         var form = $('#' + id).serializeArray()
+        var token = form.find((token) => (token.name == 'authorization')).value
+
+        var findIndex = form.findIndex(function (element) {
+            return element.name == 'authorization'
+        })
+        form.splice(findIndex, 1)
         var method = $('#' + id + '_method').val().toUpperCase();
         var uri = $('#' + id + '_uri').val();
-        var token = $('#token').val();
         var data = {};
         window[method](uri, token, form, id)
     }
@@ -247,6 +296,7 @@
             dataType: 'json',
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
+
             success: function (r) {
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
@@ -269,9 +319,11 @@
             if (val.value != '' && val.value != ' ') {
                 data[val.name] = val.value;
             }
+
         })
         data = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
-        $.ajax({
+        console.log(data)
+        var a = $.ajax({
             headers: {
                 "Authorization": "Bearer " + token
             },

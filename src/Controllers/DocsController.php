@@ -55,9 +55,7 @@ class DocsController extends Controller
             if ($ref->hasMethod($controllerMethod)) {
                 $method = $ref->getMethod($controllerMethod);
                 $reader = new AnnotationReader();
-                $myAnnotation = $reader->getMethodAnnotations(
-                    $method
-                );
+                $myAnnotation = $reader->getMethodAnnotations($method);
                 $annotation = [];
                 //TODO 获取该方法的所有注释 目前只获取 title
 
@@ -71,9 +69,7 @@ class DocsController extends Controller
                 $group = explode('/', $v->uri);
                 $api_group[$group[0]][$group[1]] = [];
                 //开始遍历 parameters 获取参数
-
                 foreach ($parameters as $parameter) {
-
                     $name = $parameter->name;
                     if ($parameter_class = $parameter->getClass()) {
                         $parameter_class_name = $parameter_class->isInstance(new Request());
@@ -84,35 +80,34 @@ class DocsController extends Controller
                             $request[$v->uri . '@' . $controllerMethod]['request'] = [];
                         }
                     } else {
-                        if (!isset($request[$v->uri . '@' . $controllerMethod]['request'])){
+                        if (!isset($request[$v->uri . '@' . $controllerMethod]['request'])) {
                             $request[$v->uri . '@' . $controllerMethod]['request'] = [$name => 'required'];
                         }
                     }
                 }
             }
         }
+        $host = request()->getSchemeAndHttpHost() . '/';
         $request = $this->re($routes, $request);
-        try {
-            $user = DB::table('users')->first()->id;
-            $token = auth()->guard(config('auth.defaults.guard'))->tokenById($user);
-        } catch (\Exception $exception) {
-            $token = '';
-        }
         $api_group = $this->group($api_group, $request);
-        return view('szkj::index', ['group'=>$api_group,'token' => $token, 'version' => $version, 'request' => $request]);
+        return view('szkj::index', ['group' => $api_group, 'host' => $host, 'version' => $version, 'request' => $request]);
     }
+
+
+
+
 
     /**
      * @param $api_group
      * @param $request
      * @return array
      */
-    public function group($api_group, $request) : array
+    public function group($api_group, $request): array
     {
         foreach ($request as $key => $value) {
             $uri = explode('@', $key);
             $array_uri = explode('/', $uri[0]);
-            $api_group[$array_uri[0]][$array_uri[1]][$key] =  $value;
+            $api_group[$array_uri[0]][$array_uri[1]][$key] = $value;
         }
         return $api_group;
     }
