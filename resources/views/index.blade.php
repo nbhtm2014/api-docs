@@ -228,7 +228,6 @@
             text-indent:-999999px;
             background-image: url('https://cdn.learnku.com/build/img/top.png')"
                href="#top">
-
             </a>
             <!-- Modal -->
             <div class="modal fade" id="getToken" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -262,13 +261,11 @@
 </body>
 <script>
     $(document).ready(function () {
-
         $('.nav ul li a').click(function () {
             var first_li = $(this).parents('li').first();
             var ul = first_li.children("ul")
             ul.toggle();
         })
-
     });
 
     function js_method(id) {
