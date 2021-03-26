@@ -212,7 +212,7 @@
                     @endforeach
                 @endif
             @endforeach
-            <button style="position: fixed;z-index: 214783647;bottom: 20px;right: 20px;"
+            <button style="position: fixed;z-index: 214783647;top: 20px;right: 20px;"
                     type="button"
                     class="btn btn-primary btn-lg"
                     data-toggle="modal"
@@ -221,7 +221,7 @@
             </button>
             <a style="position: fixed;
             z-index: 214783647;
-            bottom: 100px;
+            bottom: 40px;
             right: 40px;
             width: 38px;
             height: 38px;
