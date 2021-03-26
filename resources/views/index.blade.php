@@ -30,6 +30,7 @@
             font-weight: 400;
             line-height: 1px;
         }
+
     </style>
 </head>
 
@@ -38,7 +39,8 @@
     <div class="row">
         <div class="col-xs-3" role="complementary">
             @foreach($group as $k=>$v)
-                <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix">
+                <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix"
+                     style="position: relative;height: auto">
                     <ul class="nav bs-docs-sidenav">
                         <li class=><a href="#{{$k}}">{{$k}}</a>
                             @if(!empty($v))
@@ -217,6 +219,17 @@
                     data-target="#getToken">
                 token
             </button>
+            <a style="position: fixed;
+            z-index: 214783647;
+            bottom: 100px;
+            right: 40px;
+            width: 38px;
+            height: 38px;
+            text-indent:-999999px;
+            background-image: url('https://cdn.learnku.com/build/img/top.png')"
+               href="#top">
+
+            </a>
             <!-- Modal -->
             <div class="modal fade" id="getToken" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
