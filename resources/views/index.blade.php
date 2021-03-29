@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
           integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
     <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
@@ -97,6 +99,7 @@
                                                 @endif
                                             </select>
                                         </div>
+
                                         <div class="col-xs-5">
                                             <div class="input-group">
                                                 <span class="input-group-addon" id="basic-addon3">{{ $host }}</span>
@@ -105,11 +108,15 @@
                                                        aria-describedby="sizing-addon2"
                                                        id="{{ $vv['index'] }}_uri">
                                             </div>
+
                                         </div>
+
                                         <div class="col-xs-1">
+
                                             <a href="javascript:void(0);" onclick="js_method('{{$vv['index']}}')"
-                                               class="btn btn-info "
-                                               role="button">提交</a>
+                                               class="btn btn-info"
+                                               role="button">提交
+                                            </a>
                                         </div>
                                     </div>
                                     <p></p>
@@ -212,7 +219,7 @@
                     @endforeach
                 @endif
             @endforeach
-            <button style="position: fixed;z-index: 214783647;top: 20px;right: 20px;"
+            <button style="position: fixed;z-index: 214783647;top: 80px;right: 20px;"
                     type="button"
                     class="btn btn-primary btn-lg"
                     data-toggle="modal"
@@ -303,10 +310,12 @@
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
+                toastr.info(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
+                toastr.error(r.message)
                 var j = r.responseJSON;
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(j));
@@ -340,10 +349,12 @@
             contentType: 'application/json;charset=UTF-8',
 
             success: function (r) {
+                toastr.info(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
+                toastr.error(r.message)
                 var j = r.responseJSON;
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(j));
@@ -376,13 +387,16 @@
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
+                toastr.info(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
+                toastr.error(r.message)
                 var j = r.responseJSON;
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(j));
+
             },
             complete: function (r) {
                 var collapse = $('#collapse_' + id);
@@ -412,10 +426,12 @@
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
+                toastr.info(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
+                toastr.error(r.message)
                 var j = r.responseJSON;
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(j));
