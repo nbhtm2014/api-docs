@@ -285,6 +285,7 @@
         form.splice(findIndex, 1)
         var method = $('#' + id + '_method').val().toUpperCase();
         var uri = $('#' + id + '_uri').val();
+
         var data = {};
         window[method](uri, token, form, id)
     }
@@ -315,10 +316,15 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                toastr.error(r.message)
-                var j = r.responseJSON;
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(j));
+                if (r.code) {
+                    toastr.error(r.message)
+                    var j = r.responseJSON;
+                    var pre = $('#pre_' + id);
+                    pre.html(syntaxHighlight(j));
+                }else{
+                    var pre = $('#pre_' + id);
+                    pre.html(r.responseText);
+                }
             },
             complete: function (r) {
                 var collapse = $('#collapse_' + id);
@@ -354,10 +360,15 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                toastr.error(r.message)
-                var j = r.responseJSON;
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(j));
+                if (r.code) {
+                    toastr.error(r.message)
+                    var j = r.responseJSON;
+                    var pre = $('#pre_' + id);
+                    pre.html(syntaxHighlight(j));
+                }else{
+                    var pre = $('#pre_' + id);
+                    pre.html(r.responseText);
+                }
             },
             complete: function (r) {
                 var collapse = $('#collapse_' + id);
@@ -375,7 +386,6 @@
 
         })
         data = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
-        console.log(data)
         var a = $.ajax({
             headers: {
                 "Authorization": "Bearer " + token
@@ -387,15 +397,21 @@
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
+                console.log(r)
                 toastr.info(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                toastr.error(r.message)
-                var j = r.responseJSON;
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(j));
+                if (r.code) {
+                    toastr.error(r.message)
+                    var j = r.responseJSON;
+                    var pre = $('#pre_' + id);
+                    pre.html(syntaxHighlight(j));
+                }else{
+                    var pre = $('#pre_' + id);
+                    pre.html(r.responseText);
+                }
 
             },
             complete: function (r) {
@@ -431,10 +447,15 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                toastr.error(r.message)
-                var j = r.responseJSON;
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(j));
+                if (r.code) {
+                    toastr.error(r.message)
+                    var j = r.responseJSON;
+                    var pre = $('#pre_' + id);
+                    pre.html(syntaxHighlight(j));
+                }else{
+                    var pre = $('#pre_' + id);
+                    pre.html(r.responseText);
+                }
             },
             complete: function (r) {
                 var collapse = $('#collapse_' + id);
