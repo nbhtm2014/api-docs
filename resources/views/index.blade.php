@@ -123,7 +123,7 @@
 
         .app-sub-sidebar li::before {
             content: '-';
-            /*padding: 4px;*/
+            padding-right: 4px;
             float: left;
         }
         .github-corner{
