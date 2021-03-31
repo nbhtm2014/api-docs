@@ -4,7 +4,7 @@
  * Created by 2020/11/13 16:16
  **/
 
-namespace Szkj\ApiDocs\Annotation;
+namespace Nbhtm\ApiDocs\Annotation;
 
 
 /**

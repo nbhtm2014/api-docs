@@ -1,5 +1,5 @@
 {
-    "name": "szkj\/api-docs",
+    "name": "nbhtm\/api-docs",
     "description": "Package description here.",
     "license": "MIT",
     "authors": [
@@ -15,13 +15,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Szkj\\ApiDocs\\": "src"
+            "Nbhtm\\ApiDocs\\": "src"
         }
     },
     "extra": {
     "laravel": {
         "providers": [
-            "Szkj\\ApiDocs\\DocsServiceProvider"
+            "Nbhtm\\ApiDocs\\DocsServiceProvider"
         ]
     }
 }

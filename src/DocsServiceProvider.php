@@ -4,7 +4,7 @@
  * Created by 2020/11/13 11:29
  **/
 
-namespace Szkj\ApiDocs;
+namespace Nbhtm\ApiDocs;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -18,7 +18,7 @@ class DocsServiceProvider extends ServiceProvider
 
     protected function registerViews()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'szkj');
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'nbhtm');
     }
 
 

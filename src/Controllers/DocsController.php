@@ -4,7 +4,7 @@
  * Created by 2020/11/13 10:33
  **/
 
-namespace Szkj\ApiDocs\Controllers;
+namespace Nbhtm\ApiDocs\Controllers;
 
 use Dingo\Api\Routing\Router;
 
@@ -94,7 +94,7 @@ class DocsController extends Controller
         $host = request()->getSchemeAndHttpHost() . '/';
         $request = $this->re($routes, $request);
         $api_group = $this->group($api_group, $request);
-        return view('szkj::index', ['group' => $api_group, 'tokens'=>$tokens, 'host' => $host, 'version' => $version, 'request' => $request]);
+        return view('nbhtm::index', ['group' => $api_group, 'tokens'=>$tokens, 'host' => $host, 'version' => $version, 'request' => $request]);
     }
 
 

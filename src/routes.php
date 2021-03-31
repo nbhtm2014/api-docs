@@ -7,5 +7,5 @@ use Illuminate\Support\Facades\Route;
 Route::group([
     'prefix' => 'docs',
 ], function (Router $router) {
-    $router->get('/', \Szkj\ApiDocs\Controllers\DocsController::class . '@index');
+    $router->get('/', \Nbhtm\ApiDocs\Controllers\DocsController::class . '@index');
 });
