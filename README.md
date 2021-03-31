@@ -6,7 +6,7 @@
 ## Installing
 
 ```shell
-$ composer require szkj/api-docs -vvv
+$ composer require nbhtm/api-docs
 ```
 
 ## Usage
