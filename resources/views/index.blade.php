@@ -52,7 +52,11 @@
             margin-inline-start: 0px;
             margin-inline-end: 0px;
         }
-
+        thead tr th{
+            color: #fff;
+            background-color: #343a40;
+            border-color: #454d55;
+        }
         .sidebar {
             border-right: 1px solid rgba(0, 0, 0, 0.07);
             overflow-y: auto;
