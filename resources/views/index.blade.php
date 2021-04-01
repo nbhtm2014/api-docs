@@ -23,6 +23,15 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
             crossorigin="anonymous"></script>
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+
     <style>
         body {
             font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
@@ -206,8 +215,8 @@
                                         class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
                                 </p>
                                 <div class="row">
-                                    <div class="col-xs-2">
-                                        <select class="form-control" name="method" id="{{ $vv['index'] }}_method">
+                                    <div class="col-xs-1">
+                                        <select class="selectpicker form-control" name="method" id="{{ $vv['index'] }}_method">
                                             @if(isset($vv['methods']))
                                                 @foreach($vv['methods'] as $kkk=>$vvv)
                                                     <option value="{{$vvv}}">{{$vvv}}</option>
