@@ -188,10 +188,10 @@
             @if(!empty($v))
                 @foreach($v as $key=>$value)
                     <div class="bs-docs-section">
-                        <h2 id="{{ $key }}">{{$key}}</h2>
+                        <h3 id="{{ $key }}">{{$key}}</h3>
                         @if(!empty($value))
                             @foreach($value as $kk=>$vv)
-                                <h3 id="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</h3>
+                                <h4 id="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</h4>
                                 @if(isset($vv['annotation']['desc']))
                                     <blockquote>
                                         <footer>{{$vv['annotation']['desc']}}</footer>
@@ -248,13 +248,14 @@
                                     </ul>
                                     <div id="tabConten" class="tab-content">
                                         <div class="tab-pane fade in active" id="body-table-{{ $vv['index'] }}">
-                                            <table class="table  table-hover ">
+                                            <table id="{{$vv['index']}}_table" class="table  table-hover" style="border-bottom: 1px solid #ddd">
                                                 <thead>
                                                 <tr>
                                                     <th>参数</th>
                                                     <th>是否必填</th>
                                                     <th>规则</th>
                                                     <th>传参</th>
+                                                    <th>操作</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
@@ -265,6 +266,7 @@
                                                         <td>{{ implode(' | ',$vvv) }}</td>
                                                         <td><input class="" name="{{ $kkk }}" type="text"
                                                                    data-key="{{ $kkk }}"></td>
+                                                        <td><button onclick="deleteRow({{$vv['index']}},$(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
                                                     </tr>
                                                     @if(in_array('confirmed',$vvv))
                                                         <tr>
@@ -273,7 +275,7 @@
                                                             <td></td>
                                                             <td><input name="{{ $kkk.'_confirmation' }}" type="text"
                                                                        data-key="{{ $kkk.'_confirmation' }}"></td>
-
+                                                            <td><button onclick="deleteRow($(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
@@ -594,6 +596,11 @@
             return '<span class="' + cls + '">' + match + '</span>';
         });
     }
+
+    function deleteRow(row){
+        row.parent().parent().remove();
+    }
+
 </script>
 </body>
 </html>
