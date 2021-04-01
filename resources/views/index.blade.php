@@ -426,8 +426,8 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                if (r.code) {
-                    toastr.error(r.message)
+                if (r.responseJSON.code) {
+                    toastr.error(r.responseJSON.message)
                     var j = r.responseJSON;
                     var pre = $('#pre_' + id);
                     pre.html(syntaxHighlight(j));
@@ -557,8 +557,8 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                if (r.code) {
-                    toastr.error(r.message)
+                if (r.responseJSON.code) {
+                    toastr.error(r.responseJSON.message)
                     var j = r.responseJSON;
                     var pre = $('#pre_' + id);
                     pre.html(syntaxHighlight(j));
