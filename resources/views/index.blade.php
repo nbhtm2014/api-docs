@@ -215,7 +215,7 @@
                                         class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
                                 </p>
                                 <div class="row">
-                                    <div class="col-xs-1">
+                                    <div class="col-xs-2">
                                         <select class="selectpicker form-control" name="method" id="{{ $vv['index'] }}_method">
                                             @if(isset($vv['methods']))
                                                 @foreach($vv['methods'] as $kkk=>$vvv)
