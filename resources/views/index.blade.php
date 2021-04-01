@@ -421,7 +421,7 @@
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
-                toastr.info(r.message)
+                toastr.success(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
@@ -465,13 +465,13 @@
             contentType: 'application/json;charset=UTF-8',
 
             success: function (r) {
-                toastr.info(r.message)
+                toastr.success(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                if (r.code) {
-                    toastr.error(r.message)
+                if (r.responseJSON.code) {
+                    toastr.error(r.responseJSON.message)
                     var j = r.responseJSON;
                     var pre = $('#pre_' + id);
                     pre.html(syntaxHighlight(j));
@@ -507,8 +507,7 @@
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
-                console.log(r)
-                toastr.info(r.message)
+                toastr.success(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
@@ -552,7 +551,7 @@
             mimeType: "multipart/form-data",
             contentType: 'application/json;charset=UTF-8',
             success: function (r) {
-                toastr.info(r.message)
+                toastr.success(r.message)
                 var pre = $('#pre_' + id);
                 pre.html(syntaxHighlight(r));
             },
