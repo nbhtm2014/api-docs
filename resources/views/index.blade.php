@@ -216,7 +216,7 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-xs-5">
+                                    <div class="col-xs-7">
                                         <div class="input-group">
                                             <span class="input-group-addon" id="basic-addon3">{{ $host }}</span>
                                             <input type="text" name="uri" value="{{$vv['uri']}}"
