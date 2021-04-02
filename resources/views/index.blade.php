@@ -310,7 +310,7 @@
                                                         <div class="input-group">
                                                             <span class="input-group-addon" >Bearer </span>
                                                             <input type="text" name="authorization"
-                                                                   class="form-control">
+                                                                   class="form-control" value="@if(cache()->has('docs_token')){{ cache()->get('docs_token')}} @endif">
                                                         </div>
 
                                                     </td>
@@ -385,6 +385,8 @@
                                     <label for="message-text" class="control-label">{{$tokenKey}}</label>
                                     <textarea class="form-control" id="message-text"
                                               rows="5">{{$tokenValue}}</textarea>
+                                    <a role="button" style="margin-top: 10px" class="btn btn-info" onclick="{{ cache()->put('docs_token',$tokenValue) }};toastr.success('设置token成功')
+                                        ">CacheToken</a>
                                 </div>
                             @endforeach
                         </form>
@@ -496,12 +498,17 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                if (r.responseJSON.code) {
+                if (r.status != 200){
+                    var j = r.responseJSON;
+                    var pre = $('#pre_' + id);
+                    pre.html(syntaxHighlight(j));
+                }
+                if (r.responseJSON != undefined) {
                     toastr.error(r.responseJSON.message)
                     var j = r.responseJSON;
                     var pre = $('#pre_' + id);
                     pre.html(syntaxHighlight(j));
-                } else {
+                }else{
                     var pre = $('#pre_' + id);
                     pre.html(r.responseText);
                 }
