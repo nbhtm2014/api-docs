@@ -279,7 +279,7 @@
                                                         <td>{{ implode(' | ',$vvv) }}</td>
                                                         <td><input class="" name="{{ $kkk }}" type="text"
                                                                    data-key="{{ $kkk }}"></td>
-                                                        <td><button onclick="deleteRow({{$vv['index']}},$(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
+                                                        <td><button onclick="deleteRow($(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
                                                     </tr>
                                                     @if(in_array('confirmed',$vvv))
                                                         <tr>
