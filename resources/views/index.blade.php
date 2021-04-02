@@ -447,12 +447,17 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                if (r.responseJSON.code) {
+                if (r.status != 200){
+                    var j = r.responseJSON;
+                    var pre = $('#pre_' + id);
+                    pre.html(syntaxHighlight(j));
+                }
+                if (r.responseJSON != undefined) {
                     toastr.error(r.responseJSON.message)
                     var j = r.responseJSON;
                     var pre = $('#pre_' + id);
                     pre.html(syntaxHighlight(j));
-                } else {
+                }else{
                     var pre = $('#pre_' + id);
                     pre.html(r.responseText);
                 }
