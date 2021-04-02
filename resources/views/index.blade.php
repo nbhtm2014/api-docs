@@ -306,8 +306,14 @@
                                                 <tbody>
                                                 <tr>
                                                     <td>Authorization</td>
-                                                    <td><input class="form-control" type="text"
-                                                               name="authorization"></td>
+                                                    <td>
+                                                        <div class="input-group">
+                                                            <span class="input-group-addon" >Bearer </span>
+                                                            <input type="text" name="authorization"
+                                                                   class="form-control">
+                                                        </div>
+
+                                                    </td>
                                                 </tr>
                                                 </tbody>
                                             </table>
