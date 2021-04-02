@@ -204,13 +204,19 @@
                         <h3 id="{{ $key }}">{{$key}}</h3>
                         @if(!empty($value))
                             @foreach($value as $kk=>$vv)
-                                <h4 id="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</h4>
+                                <h4 id="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}   @if(isset($vv['annotation']['author']))
+                                        <small>
+                                            {{$vv['annotation']['author']}}
+                                        </small>
+                                    @endif</h4>
                                 @if(isset($vv['annotation']['desc']))
                                     <blockquote>
                                         <footer>{{$vv['annotation']['desc']}}</footer>
                                     </blockquote>
                                 @endif
-                                <p><kbd>{{$kk}}</kbd>
+
+                                <p>
+                                    <kbd>{{$kk}}</kbd>
                                     <span
                                         class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
                                 </p>

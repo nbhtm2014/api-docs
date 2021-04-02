@@ -8,6 +8,9 @@ namespace Nbhtm\ApiDocs\Controllers;
 
 use Dingo\Api\Routing\Router;
 
+use Doctrine\Common\Annotations\Annotation;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+use Doctrine\Common\Annotations\DocParser;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Doctrine\Common\Annotations\AnnotationReader;
@@ -15,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Validation\Rules\In;
 use Illuminate\Validation\Rules\Unique;
+use League\CommonMark\DocParserInterface;
+use Nbhtm\ApiDocs\Annotation\Title;
 use Tymon\JWTAuth\JWTAuth;
 
 class DocsController extends Controller
@@ -46,9 +51,10 @@ class DocsController extends Controller
         $api_group = [];
 
 
+        $docParser = new DocParser();
+        $docParser->setIgnoreNotImportedAnnotations(true);
 
         $tokens = $this->getToken();
-
         foreach ($routes as $k => $v) {
             $controller = get_class($v->controller);
             $controllerMethod = $v->controllerMethod;
@@ -60,13 +66,28 @@ class DocsController extends Controller
                 $method = $ref->getMethod($controllerMethod);
                 $reader = new AnnotationReader();
                 $myAnnotation = $reader->getMethodAnnotations($method);
-                $annotation = [];
-                //TODO 获取该方法的所有注释 目前只获取 title
 
+                //解析注释
+                $annotation = [];
                 foreach ($myAnnotation as $key => $vv) {
                     $annotation['title'] = $vv->title;
                     $annotation['desc'] = $vv->desc;
+
                 }
+                $docs = $method->getDocComment();
+
+                $pos = $this->findInitialTokenPosition($docs);
+                if(!is_null($pos)) {
+                    $docs = trim(substr($docs, $pos), '* /');
+                    $docs = str_replace(['"', '*', '/', '/n', PHP_EOL], '', $docs);
+                    $docs = explode('@', $docs);
+                    foreach ($docs as $docsKey => $docsValue) {
+                        if (strstr($docsValue,'author')){
+                            $annotation['author'] = $docsValue;
+                        }
+                    }
+                }
+
                 $request[$v->uri . '@' . $controllerMethod]['annotation'] = $annotation;
                 $parameters = $ref->getMethod($controllerMethod)->getParameters();
                 //创建分组
@@ -184,4 +205,29 @@ class DocsController extends Controller
         }
         return $array;
     }
+
+    /**
+     * Finds the first valid annotation
+     *
+     * @param string $input The docblock string to parse
+     */
+    private function findInitialTokenPosition($input): ?int
+    {
+        $pos = 0;
+
+        // search for first valid annotation
+        while (($pos = strpos($input, '@', $pos)) !== false) {
+            $preceding = substr($input, $pos - 1, 1);
+
+            // if the @ is preceded by a space, a tab or * it is valid
+            if ($pos === 0 || $preceding === ' ' || $preceding === '*' || $preceding === "\t") {
+                return $pos;
+            }
+
+            $pos++;
+        }
+
+        return null;
+    }
+
 }
