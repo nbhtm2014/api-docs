@@ -67,6 +67,7 @@
             border-color: #454d55;
         }
         .sidebar {
+            margin-top: 80px;
             border-right: 1px solid rgba(0, 0, 0, 0.07);
             overflow-y: auto;
             padding: 20px 0 0;
