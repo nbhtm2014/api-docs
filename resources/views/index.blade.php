@@ -596,7 +596,8 @@
                 pre.html(syntaxHighlight(r));
             },
             error: function (r) {
-                if (r.responseJSON.code) {
+
+                if (r.responseJSON) {
                     toastr.error(r.responseJSON.message)
                     var j = r.responseJSON;
                     var pre = $('#pre_' + id);
