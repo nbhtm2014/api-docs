@@ -181,7 +181,7 @@
                                             <ul class="app-sub-sidebar">
                                                 @foreach($value as $kk=>$vv)
                                                     <li>
-                                                        <a class="section-link" href="#{{$kk}}"
+                                                        <a class="section-link" href="#{{$kk}}" onclick="showContent('{{md5($kk)}}')"
                                                            title="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</a>
                                                     </li>
                                                 @endforeach
@@ -197,162 +197,196 @@
         </div>
     </div>
     <div class="content">
+        <div id="welcome">
+            <h1>欢迎使用api-docs</h1>
+            <p>
+                插件基于<code>Laravel8</code> + <code>jwt-auth</code> + <code>dingo-api</code> 开发
+            </p>
+            <h2>建议</h2>
+            <p>
+                api文档会自动读取所有的 <code>route</code>，通过<code>route</code> 反射找到对应的 <code>class</code>和<code>function</code>,
+                并通过<code>function</code>的注释 拿到<code>function</code>的名称和<code>request</code>表单验证.
+            </p>
+            <mark>在此我们强烈建议用户使用<code>reuqest</code>来做参数验证</mark>
+            <h2>使用说明</h2>
+            <p>只需要专注<code>function</code>的注释即可,如下:</p>
+            <pre>
+/**
+* @Title(title="后台用户登入",desc="...")
+* @param AuthLoginRequest $request
+* @return Response
+* @author htm
+* date 2021-04-07 15:04:41
+*/
+public function login(AuthLoginRequest $request): Response
+{
+
+}
+</pre>
+
+            <p><kbd>@Title(title="后台用户登入",desc="...")</kbd> 引用<code>use Nbhtm\ApiDocs\Annotation\Title;</code>,其中<code>title</code>方法名称<code>desc</code>方法详情</p>
+            <p><kbd>@author  htm</kbd> 作者</p>
+            <p><kbd>date 2021-04-07 15:04:41</kbd> 编写时间</p>
+
+        </div>
         @foreach($group as $k=>$v)
-            <h1 id="{{$k}}">{{$k}}</h1>
+            {{--            <h1 id="{{$k}}">{{$k}}</h1>--}}
             @if(!empty($v))
                 @foreach($v as $key=>$value)
                     <div class="bs-docs-section">
-                        <h3 id="{{ $key }}">{{$key}}</h3>
+                        <h3 id="{{ $key }}" hidden>{{$key}}</h3>
                         @if(!empty($value))
                             @foreach($value as $kk=>$vv)
-                                <h4 id="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}   @if(isset($vv['annotation']['author']))
-                                        <small>
-                                            {{$vv['annotation']['author']}}
-                                        </small>
-                                    @endif</h4>
-                                @if(isset($vv['annotation']['desc']))
-                                    <blockquote>
-                                        <footer>{{$vv['annotation']['desc']}}</footer>
-                                    </blockquote>
-                                @endif
+                                <div id="{{md5($kk)}}" hidden>
+                                    <h4 >{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}   @if(isset($vv['annotation']['author']))
+                                            <small>
+                                                {{$vv['annotation']['author']}}
+                                            </small>
+                                        @endif</h4>
+                                    @if(isset($vv['annotation']['desc']))
+                                        <blockquote>
+                                            <footer>{{$vv['annotation']['desc']}}</footer>
+                                        </blockquote>
+                                    @endif
 
-                                <p>
-                                    <kbd>{{$kk}}</kbd>
-                                    <span
-                                        class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
-                                </p>
-                                <div class="row">
-                                    <div class="col-xs-2">
-                                        <select class="selectpicker form-control" name="method" id="{{ $vv['index'] }}_method">
-                                            @if(isset($vv['methods']))
-                                                @foreach($vv['methods'] as $kkk=>$vvv)
-                                                    <option value="{{$vvv}}">{{$vvv}}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-
-                                    <div class="col-xs-7">
-                                        <div class="input-group">
-                                            <span class="input-group-addon" id="basic-addon3">{{ $host }}</span>
-                                            <input type="text" name="uri" value="{{$vv['uri']}}"
-                                                   class="form-control"
-                                                   aria-describedby="sizing-addon2"
-                                                   id="{{ $vv['index'] }}_uri">
+                                    <p>
+                                        <kbd>{{$kk}}</kbd>
+                                        <span
+                                            class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
+                                    </p>
+                                    <div class="row">
+                                        <div class="col-xs-2">
+                                            <select class="selectpicker form-control" name="method" id="{{ $vv['index'] }}_method">
+                                                @if(isset($vv['methods']))
+                                                    @foreach($vv['methods'] as $kkk=>$vvv)
+                                                        <option value="{{$vvv}}">{{$vvv}}</option>
+                                                    @endforeach
+                                                @endif
+                                            </select>
                                         </div>
 
-                                    </div>
+                                        <div class="col-xs-7">
+                                            <div class="input-group">
+                                                <span class="input-group-addon" id="basic-addon3">{{ $host }}</span>
+                                                <input type="text" name="uri" value="{{$vv['uri']}}"
+                                                       class="form-control"
+                                                       aria-describedby="sizing-addon2"
+                                                       id="{{ $vv['index'] }}_uri">
+                                            </div>
 
-                                    <div class="col-xs-1">
+                                        </div>
 
-                                        <a href="javascript:void(0);" onclick="js_method('{{$vv['index']}}')"
-                                           class="btn btn-info"
-                                           role="button">提交
-                                        </a>
+                                        <div class="col-xs-1">
+
+                                            <a href="javascript:void(0);" onclick="js_method('{{$vv['index']}}')"
+                                               class="btn btn-info"
+                                               role="button">提交
+                                            </a>
+                                        </div>
                                     </div>
-                                </div>
-                                <p></p>
-                                <form id="{{ $vv['index'] }}">
-                                    {{--                                        @if(!empty($vv['request']))--}}
-                                    <ul id="tab" class="nav nav-tabs">
-                                        <li class="active">
-                                            <a href="#body-table-{{ $vv['index'] }}" data-toggle="tab">
-                                                Body
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="#header-table-{{ $vv['index'] }}" data-toggle="tab">
-                                                Headers
-                                            </a>
-                                        </li>
-                                    </ul>
-                                    <div id="tabConten" class="tab-content">
-                                        <div class="tab-pane fade in active" id="body-table-{{ $vv['index'] }}">
-                                            <table id="{{$vv['index']}}_table" class="table  table-hover" style="border-bottom: 1px solid #ddd">
-                                                <thead>
-                                                <tr>
-                                                    <th>参数</th>
-                                                    <th>是否必填</th>
-                                                    <th>规则</th>
-                                                    <th>传参</th>
-                                                    <th>操作</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach($vv['request'] as $kkk=>$vvv)
+                                    <p></p>
+                                    <form id="{{ $vv['index'] }}">
+                                        {{--                                        @if(!empty($vv['request']))--}}
+                                        <ul id="tab" class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#body-table-{{ $vv['index'] }}" data-toggle="tab">
+                                                    Body
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="#header-table-{{ $vv['index'] }}" data-toggle="tab">
+                                                    Headers
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <div id="tabConten" class="tab-content">
+                                            <div class="tab-pane fade in active" id="body-table-{{ $vv['index'] }}">
+                                                <table id="{{$vv['index']}}_table" class="table  table-hover" style="border-bottom: 1px solid #ddd">
+                                                    <thead>
                                                     <tr>
-                                                        <td>{{ $kkk }}</td>
-                                                        <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
-                                                        <td>{{ implode(' | ',$vvv) }}</td>
-                                                        <td><input class="" name="{{ $kkk }}" type="text"
-                                                                   data-key="{{ $kkk }}"></td>
-                                                        <td><button onclick="deleteRow($(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
+                                                        <th>参数</th>
+                                                        <th>是否必填</th>
+                                                        <th>规则</th>
+                                                        <th>传参</th>
+                                                        <th>操作</th>
                                                     </tr>
-                                                    @if(in_array('confirmed',$vvv))
+                                                    </thead>
+                                                    <tbody>
+                                                    @foreach($vv['request'] as $kkk=>$vvv)
                                                         <tr>
-                                                            <td>{{ $kkk.'_confirmation' }}</td>
+                                                            <td>{{ $kkk }}</td>
                                                             <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
-                                                            <td></td>
-                                                            <td><input name="{{ $kkk.'_confirmation' }}" type="text"
-                                                                       data-key="{{ $kkk.'_confirmation' }}"></td>
+                                                            <td>{{ implode(' | ',$vvv) }}</td>
+                                                            <td><input class="" name="{{ $kkk }}" type="text"
+                                                                       data-key="{{ $kkk }}"></td>
                                                             <td><button onclick="deleteRow($(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
                                                         </tr>
-                                                    @endif
-                                                @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                        <div class="tab-pane fade in" id="header-table-{{ $vv['index'] }}">
-                                            <table class="table  table-hover ">
-                                                <thead>
-                                                <tr>
-                                                    <th>KEY</th>
-                                                    <th>VALUE</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td>Authorization</td>
-                                                    <td>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon" >Bearer </span>
-                                                            <input type="text" name="authorization"
-                                                                   class="form-control" value="@if(cache()->has('docs_token')){{ cache()->get('docs_token')}} @endif">
-                                                        </div>
+                                                        @if(in_array('confirmed',$vvv))
+                                                            <tr>
+                                                                <td>{{ $kkk.'_confirmation' }}</td>
+                                                                <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
+                                                                <td></td>
+                                                                <td><input name="{{ $kkk.'_confirmation' }}" type="text"
+                                                                           data-key="{{ $kkk.'_confirmation' }}"></td>
+                                                                <td><button onclick="deleteRow($(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="tab-pane fade in" id="header-table-{{ $vv['index'] }}">
+                                                <table class="table  table-hover ">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>KEY</th>
+                                                        <th>VALUE</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Authorization</td>
+                                                        <td>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon" >Bearer </span>
+                                                                <input type="text" name="authorization"
+                                                                       class="form-control" value="@if(cache()->has('docs_token')){{ cache()->get('docs_token')}} @endif">
+                                                            </div>
 
-                                                    </td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    {{--                                        @endif--}}
-                                </form>
+                                        {{--                                        @endif--}}
+                                    </form>
 
-                                <div style="margin-top: 30px" id="collapse_{{ $vv['index'] }}" hidden>
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading" role="tab" id="headingOne">
-                                            <h4 class="panel-title">
-                                                <a role="button" data-toggle="collapse" data-parent="#accordion"
-                                                   href="#collapse{{$vv['index']}}" aria-expanded="true"
-                                                   aria-controls="collapseOne">
-                                                    Response
-                                                </a>
-                                            </h4>
-                                        </div>
-                                        <div id="collapse{{$vv['index']}}" class="panel-collapse collapse in"
-                                             role="tabpanel" aria-labelledby="headingOne">
-                                            <div class="panel-body">
+                                    <div style="margin-top: 30px" id="collapse_{{ $vv['index'] }}" hidden>
+                                        <div class="panel panel-default">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
+                                                       href="#collapse{{$vv['index']}}" aria-expanded="true"
+                                                       aria-controls="collapseOne">
+                                                        Response
+                                                    </a>
+                                                </h4>
+                                            </div>
+                                            <div id="collapse{{$vv['index']}}" class="panel-collapse collapse in"
+                                                 role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
                                         <pre style="color: #ffffff;background-color: #333333;" class="language-php"
                                              data-lang="php"
                                              id="pre_{{ $vv['index'] }}">
                                         </pre>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr>
                                 </div>
-                                <hr>
                             @endforeach
                         @endif
                     </div>
@@ -407,6 +441,8 @@
     </div>
 </main>
 <script>
+    var up_id = null;
+
     $(document).ready(function () {
         $('.sidebar-nav ul li a').click(function () {
             var first_li = $(this).parents('li').first();
@@ -414,6 +450,18 @@
             ul.toggle(10)
         })
     });
+
+    function showContent(id){
+        $('#welcome').hide()
+        if (up_id != null){
+            $("div#"+up_id).toggle()
+            $("div#"+up_id).parent('div').children('h3').toggle()
+        }
+        $("div#"+id).parent('div').children('h3').toggle()
+        $("div#"+id).toggle()
+        up_id = id;
+    }
+
 
     function js_method(id) {
         var form = $('#' + id).serializeArray()
