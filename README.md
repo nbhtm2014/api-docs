@@ -11,7 +11,9 @@ $ composer require nbhtm/api-docs
 
 ## Usage
 
-TODO
+安装完成后访问
+http://host/docs
+即可访问api-docs
 
 ## Contributing
 
