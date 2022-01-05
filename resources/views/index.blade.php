@@ -1,669 +1,847 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Api-Docs</title>
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <!-- 必须的 meta 标签 -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
-          integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-
-
-    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-            crossorigin="anonymous"></script>
-
-
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
-
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
-
-    <!-- Latest toastr and toastr JavaScript -->
-    <link href="https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
-    <script src="https://cdn.bootcdn.net/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
-
+    <!-- Bootstrap 的 CSS 文件 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery.serializeJSON/3.2.1/jquery.serializejson.js"></script>
     <style>
         body {
-            font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
-            font-size: 15px;
-            letter-spacing: 0;
-            margin: 0 0 0 0;
+            height: 100%;
             overflow-x: hidden;
+            overflow-y: hidden;
         }
 
-        div {
-            display: block;
+        html {
+            height: -webkit-fill-available;
         }
 
-        ul {
-            list-style-type: disc;
-        }
-
-        li {
-            display: list-item;
-            text-align: -webkit-match-parent;
-        }
-
-        p {
-            display: block;
-            margin-block-start: 1em;
-            margin-block-end: 1em;
-            margin-inline-start: 0px;
-            margin-inline-end: 0px;
-        }
-        thead tr th{
-            color: #fff;
-            background-color: #343a40;
-            border-color: #454d55;
-        }
-        .sidebar {
-            margin-top: 80px;
-            border-right: 1px solid rgba(0, 0, 0, 0.07);
+        main {
+            /*display: flex;*/
+            flex-wrap: nowrap;
+            height: 100vh;
+            height: -webkit-fill-available;
+            max-height: 100vh;
+            overflow-x: hidden;
             overflow-y: auto;
-            /*padding: 20px 0 0;*/
-            top: 0;
-            bottom: 0;
-            left: 0;
-            transition: transform 250ms ease-out;
-            width: 300px;
-            z-index: 20;
-            position: fixed;
-            background-color: #fff;
-            color: #364149;
+
         }
 
-        .sidebar ul {
-            margin: 0 0 0 15px;
-            padding: 0 0 0 0;
+        .b-example-divider {
+            flex-shrink: 0;
+            width: 1.5rem;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, .1);
+            border: solid rgba(0, 0, 0, .15);
+            border-width: 1px 0;
+            box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
         }
 
-        .sidebar li {
-            margin: 6px 0 6px 0;
+        .bi {
+            vertical-align: -.125em;
+            pointer-events: none;
+            fill: currentColor;
         }
 
-        .sidebar li > p {
-            font-weight: 700;
-            margin: 0 0 0 0;
+        .dropdown-toggle {
+            outline: 0;
         }
 
-        .sidebar ul, .sidebar ul li {
-            list-style: none;
+        .nav-flush .nav-link {
+            border-radius: 0;
         }
 
-        .sidebar ul li ul {
-            padding: 0 0 0 0;
+        .btn-toggle {
+            display: inline-flex;
+            align-items: center;
+            padding: .25rem .5rem;
+            font-weight: 600;
+            /*color: rgba(0, 0, 0, .65);*/
+            background-color: transparent;
+            border: 0;
         }
 
-        .sidebar ul li a {
-            color: #7a8ca0;
-            font-size: 13px;
-            font-weight: normal;
-            overflow: hidden;
+        .btn-toggle:hover,
+        .btn-toggle:focus {
+            /*color: rgba(0, 0, 0, .85);*/
+            background-color: #0d6efd;
+        }
+
+        .btn-toggle::before {
+            width: 1.25em;
+            line-height: 0;
+            content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+            transition: transform .35s ease;
+            transform-origin: .5em 50%;
+        }
+
+        .btn-toggle[aria-expanded="true"] {
+            /*color: rgba(0, 0, 0, .85);*/
+        }
+
+        .btn-toggle[aria-expanded="true"]::before {
+            transform: rotate(90deg);
+        }
+
+        .btn-toggle-nav a {
+            display: inline-flex;
+            padding: .1875rem .5rem;
+            margin-top: .125rem;
+            /*margin-left: 2rem;*/
+            align-items: center;
             text-decoration: none;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            border-bottom: none;
-            display: block;
         }
 
-        .sidebar .sidebar-nav {
-            line-height: 2em;
-            padding-bottom: 40px;
+        .btn-toggle-nav a:hover,
+        .btn-toggle-nav a:focus {
+            background-color: #0d6efd;
         }
 
-        .content {
-            padding: 20px 100px 60px 20px;
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 300px;
-            transition: left 250ms ease;
+        .scrollarea {
+            overflow-y: auto;
         }
 
-        .app-sub-sidebar {
-            display: none;
+        .fw-semibold {
+            font-weight: 600;
         }
 
-        .app-sub-sidebar li::before {
-            content: '-';
-            padding-right: 4px;
-            float: left;
+        .lh-tight {
+            line-height: 1.25;
         }
-        /*.github-corner{*/
-        /*    border-bottom: 0;*/
-        /*    position: fixed;*/
-        /*    right: 0;*/
-        /*    text-decoration: none;*/
-        /*    top: 0;*/
-        /*    z-index: 1;*/
-        /*}*/
-        .github-corner svg{
-            color: #fff;
-            fill: #4256b9;
-            height: 80px;
-            width: 80px;
+
+        #myTab {
+            padding-left: 0.5rem;
         }
-        svg:not(:root){
-            overflow: hidden;
+
+        #myTab button {
+            color: #6c757d;
         }
-        .github-corner .octo-arm :hover  {
-            animation: octocat-wave 560ms ease-in-out;
+
+        #myTab li > button.active {
+            /*font-weight: bold;*/
+            color: #000000;
+        }
+
+        .tab-class {
+            padding-left: 1.5rem !important;
+            margin-top: 1rem;
+            color: #6C7587;
+            font-size: 12px;
+        }
+
+        .docs-input::-webkit-input-placeholder {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        .docs-input {
+            border: none;
+            padding: 0;
+        }
+
+        table thead tr {
+            font-size: 14px;
+            border-bottom: 1px solid #dee2e6 !important;
+        }
+
+        table tbody {
+            border-top: none !important;
+        }
+
+        .btn-delete {
+            padding: 0;
+            display: none
+        }
+
+        .td-delete:hover .btn-delete {
+            display: inline-block;
+        }
+
+        .POST {
+            color: #FFD700;
+        }
+
+        .GET {
+            color: green;
+        }
+
+        .DELETE {
+            color: red;
+        }
+
+        .PUT {
+            color: #0d6efd;
+        }
+
+        #myResponseTab button {
+            color: #6C7587 !important;
+            border: none !important;
+        }
+
+        #myResponseTab button.active {
+            border-bottom: 2px solid #000000 !important;
+            color: #000000 !important;
+        }
+
+        #myResponseTabContent {
+            padding: 0.5rem;
+        }
+
+        #status span {
+            color: #20c997
+        }
+
+        #response_table {
+            border-collapse: unset;
+        }
+
+        #response_table tbody tr td {
+            padding: 0;
+        }
+
+        #response_table input::-webkit-input-placeholder {
+            color: #a0aec0;
+            font-size: 14px;
+        }
+
+        #response_table tbody tr td button {
+            border-radius: unset;
+            border: none;
+        }
+
+        .btn-group {
+            margin: 0 !important;
         }
     </style>
 </head>
 <body>
-<a href="https://github.com/nbhtm2014/api-docs" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="z-index: 100;fill:#70B7FD; color:#fff; position: fixed; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
-<main>
-    <div class="sidebar">
-        <div style="position: fixed;top: 20px;left: 100px"><h3 class="text-center">{{config('app.name')}}</h3></div>
-        <div class="sidebar-nav">
-            <ul>
-                @foreach($group as $k=>$v)
-                    <li>
-                        <p>{{ $k }}</p>
-                        @if(!empty($v))
-                            <ul>
-                                @foreach($v as $key=>$value)
-                                    <li>
-                                        <a href="#{{ $key }}" title="{{$key}}">{{$key}}</a>
-                                        @if(!empty($value))
-                                            <ul class="app-sub-sidebar">
-                                                @foreach($value as $kk=>$vv)
-                                                    <li>
-                                                        <a class="section-link" href="#{{$kk}}" onclick="showContent('{{md5($kk)}}')"
-                                                           title="{{$kk}}">{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}</a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
-                        @endif
-                    </li>
-                @endforeach
-            </ul>
-        </div>
-    </div>
-    <div class="content">
-        <div id="welcome">
-            <h1>欢迎使用api-docs</h1>
-            <p>
-                插件基于<code>Laravel8</code> + <code>jwt-auth</code> + <code>dingo-api</code> 开发
-            </p>
-            <h2>建议</h2>
-            <p>
-                api文档会自动读取所有的 <code>route</code>，通过<code>route</code> 反射找到对应的 <code>class</code>和<code>function</code>,
-                并通过<code>function</code>的注释 拿到<code>function</code>的名称和<code>request</code>表单验证.
-            </p>
-            <mark>在此我们强烈建议用户使用<code>reuqest</code>来做参数验证</mark>
-            <h2>使用说明</h2>
-            <p>只需要专注<code>function</code>的注释即可,如下:</p>
-            <pre>
-/**
-* @Title(title="后台用户登入",desc="...")
-* @param AuthLoginRequest $request
-* @return Response
-* @author htm
-* date 2021-04-07 15:04:41
-*/
-public function login(AuthLoginRequest $request): Response
-{
-
-}
-</pre>
-
-            <p><kbd>@Title(title="后台用户登入",desc="...")</kbd> 引用<code>use Nbhtm\ApiDocs\Annotation\Title;</code>,其中<code>title</code>方法名称<code>desc</code>方法详情</p>
-            <p><kbd>@author  htm</kbd> 作者</p>
-            <p><kbd>date 2021-04-07 15:04:41</kbd> 编写时间</p>
-
-        </div>
-        @foreach($group as $k=>$v)
-            {{--            <h1 id="{{$k}}">{{$k}}</h1>--}}
-            @if(!empty($v))
-                @foreach($v as $key=>$value)
-                    <div class="bs-docs-section">
-                        <h3 id="{{ $key }}" hidden>{{$key}}</h3>
-                        @if(!empty($value))
-                            @foreach($value as $kk=>$vv)
-                                <div id="{{md5($kk)}}" hidden>
-                                    <h4 >{{isset($vv['annotation']['title'])?$vv['annotation']['title']:$kk}}   @if(isset($vv['annotation']['author']))
-                                            <small>
-                                                {{$vv['annotation']['author']}}
-                                            </small>
-                                        @endif</h4>
-                                    @if(isset($vv['annotation']['desc']))
-                                        <blockquote>
-                                            <footer>{{$vv['annotation']['desc']}}</footer>
-                                        </blockquote>
-                                    @endif
-
-                                    <p>
-                                        <kbd>{{$kk}}</kbd>
-                                        <span
-                                            class="label label-{{ $vv['enabled'] ? 'success' : 'danger' }}">{{ $vv['enabled'] ? '启用' : '未定义' }}</span>
-                                    </p>
-                                    <div class="row">
-                                        <div class="col-xs-2">
-                                            <select class="selectpicker form-control" name="method" id="{{ $vv['index'] }}_method">
-                                                @if(isset($vv['methods']))
-                                                    @foreach($vv['methods'] as $kkk=>$vvv)
-                                                        <option value="{{$vvv}}">{{$vvv}}</option>
-                                                    @endforeach
-                                                @endif
-                                            </select>
-                                        </div>
-
-                                        <div class="col-xs-7">
-                                            <div class="input-group">
-                                                <span class="input-group-addon" id="basic-addon3">{{ $host }}</span>
-                                                <input type="text" name="uri" value="{{$vv['uri']}}"
-                                                       class="form-control"
-                                                       aria-describedby="sizing-addon2"
-                                                       id="{{ $vv['index'] }}_uri">
-                                            </div>
-
-                                        </div>
-
-                                        <div class="col-xs-1">
-
-                                            <a href="javascript:void(0);" onclick="js_method('{{$vv['index']}}')"
-                                               class="btn btn-info"
-                                               role="button">提交
+{{--<a href="https://github.com/nbhtm2014/api-docs" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="z-index: 100;fill:#70B7FD; color:#fff; position: fixed; top: 0; border: 0; left: 0; transform: scale(-1, 1);" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>--}}
+<div class="container-fluid" style="height: 100%">
+    <div class="row" style="height: 100%">
+        <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 20%;overflow-x: hidden;
+            overflow-y: auto;height: 100%">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-dark text-white sidebar collapse"
+                 style="width: 100%;">
+                <ul class="nav nav-pills  mb-auto" style="display: block!important;">
+                    @foreach($all_routes[array_key_first($all_routes)] as $key=>$value)
+                        <li class="nav-item">
+                            <button class="btn btn-toggle align-items-center rounded collapsed text-white"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#home-{{$key}}" aria-expanded="false">
+                                {{ $key }} <span style="top: 0px!important;left: 5px"
+                                                 class="badge bg-secondary">{{ count($value) }}</span>
+                            </button>
+                            <div class="collapse " id="home-{{$key}}">
+                                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                    @foreach($value as $k=>$v)
+                                        <li>
+                                            <a href="javascript:void(0);"
+                                               onclick="getApiDocsDetail('{{$v['url']}}','{{$v['methods'][0]}}')"
+                                               class="link-dark rounded text-white"
+                                               style="width: 100%;justify-content:flex-start">
+                                                <span class="{{$v['methods'][0]}}"
+                                                      style="margin-right: 1rem;margin-left: 2rem;font-size: 10px;width: 50px">{{$v['methods'][0]}}</span>
+                                                <span>{{ isset($v['annotation']['Title']->title) ? $v['annotation']['Title']->title: $v['url'] }}</span>
                                             </a>
-                                        </div>
-                                    </div>
-                                    <p></p>
-                                    <form id="{{ $vv['index'] }}">
-                                        {{--                                        @if(!empty($vv['request']))--}}
-                                        <ul id="tab" class="nav nav-tabs">
-                                            <li class="active">
-                                                <a href="#body-table-{{ $vv['index'] }}" data-toggle="tab">
-                                                    Body
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#header-table-{{ $vv['index'] }}" data-toggle="tab">
-                                                    Headers
-                                                </a>
-                                            </li>
-                                        </ul>
-                                        <div id="tabConten" class="tab-content">
-                                            <div class="tab-pane fade in active" id="body-table-{{ $vv['index'] }}">
-                                                <table id="{{$vv['index']}}_table" class="table  table-hover" style="border-bottom: 1px solid #ddd">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>参数</th>
-                                                        <th>是否必填</th>
-                                                        <th>规则</th>
-                                                        <th>传参</th>
-                                                        <th>操作</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    @foreach($vv['request'] as $kkk=>$vvv)
-                                                        <tr>
-                                                            <td>{{ $kkk }}</td>
-                                                            <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
-                                                            <td>{{ implode(' | ',$vvv) }}</td>
-                                                            <td><input class="" name="{{ $kkk }}" type="text"
-                                                                       data-key="{{ $kkk }}"></td>
-                                                            <td><button onclick="deleteRow($(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
-                                                        </tr>
-                                                        @if(in_array('confirmed',$vvv))
-                                                            <tr>
-                                                                <td>{{ $kkk.'_confirmation' }}</td>
-                                                                <td>{{ in_array('required',$vvv) ? '是':'否'}}</td>
-                                                                <td></td>
-                                                                <td><input name="{{ $kkk.'_confirmation' }}" type="text"
-                                                                           data-key="{{ $kkk.'_confirmation' }}"></td>
-                                                                <td><button onclick="deleteRow($(this))" type="button" class="btn btn-danger btn-xs" title="删除行"><span class="glyphicon glyphicon-minus"></span></button></td>
-                                                            </tr>
-                                                        @endif
-                                                    @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <div class="tab-pane fade in" id="header-table-{{ $vv['index'] }}">
-                                                <table class="table  table-hover ">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>KEY</th>
-                                                        <th>VALUE</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td>Authorization</td>
-                                                        <td>
-                                                            <div class="input-group">
-                                                                <span class="input-group-addon" >Bearer </span>
-                                                                <input type="text" name="authorization"
-                                                                       class="form-control" value="@if(cache()->has('docs_token')){{ cache()->get('docs_token')}} @endif">
-                                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+            </nav>
+        </div>
 
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
+        <main id="main" class="col-md-9 ms-sm-auto col-lg-10 px-md-4" style="width: 80%;padding-right: 0px!important;
+    padding-left: 0px!important;">
+            {{--title--}}
+            <div style="padding: 0.5rem">
+                <h5 id="title"></h5>
+                <span id="author" class="badge rounded-pill bg-dark"></span>
+            </div>
 
-                                        {{--                                        @endif--}}
-                                    </form>
+            {{--host--}}
+            <div class="input-group mb-4 " style="padding: 0.5rem">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        id="method_" value="POST"
+                        aria-expanded="false">POST
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" onclick="method_chonge('POST')" href="javascript:void(0);">POST</a>
+                    </li>
+                    <li><a class="dropdown-item" onclick="method_chonge('GET')" href="javascript:void(0);">GET</a></li>
+                    <li><a class="dropdown-item" onclick="method_chonge('PUT')" href="javascript:void(0);">PUT</a></li>
+                    <li><a class="dropdown-item" onclick="method_chonge('DELETE')" href="javascript:void(0);">DELETE</a>
+                    </li>
+                </ul>
 
-                                    <div style="margin-top: 30px" id="collapse_{{ $vv['index'] }}" hidden>
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading" role="tab" id="headingOne">
-                                                <h4 class="panel-title">
-                                                    <a role="button" data-toggle="collapse" data-parent="#accordion"
-                                                       href="#collapse{{$vv['index']}}" aria-expanded="true"
-                                                       aria-controls="collapseOne">
-                                                        Response
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapse{{$vv['index']}}" class="panel-collapse collapse in"
-                                                 role="tabpanel" aria-labelledby="headingOne">
-                                                <div class="panel-body">
-                                        <pre style="color: #ffffff;background-color: #333333;" class="language-php"
-                                             data-lang="php"
-                                             id="pre_{{ $vv['index'] }}">
-                                        </pre>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                </div>
-                            @endforeach
-                        @endif
-                    </div>
-                @endforeach
-            @endif
-        @endforeach
-        <button style="position: fixed;z-index: 214783647;top: 80px;right: 20px;"
-                type="button"
-                class="btn btn-primary btn-lg"
-                data-toggle="modal"
-                data-target="#getToken">
-            token
-        </button>
-        <a style="position: fixed;
-            z-index: 214783647;
-            bottom: 40px;
-            right: 40px;
-            width: 38px;
-            height: 38px;
-            text-indent:-999999px;
-            background-image: url('https://cdn.learnku.com/build/img/top.png')"
-           href="#top">
-        </a>
-        <!-- Modal -->
-        <div class="modal fade" id="getToken" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">Get Token</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            @foreach($tokens as $tokenKey => $tokenValue)
-                                <div class="form-group">
-                                    <label for="message-text" class="control-label">{{$tokenKey}}</label>
-                                    <textarea class="form-control" id="message-text"
-                                              rows="5">{{$tokenValue}}</textarea>
-                                    <a role="button" style="margin-top: 10px" class="btn btn-info" onclick="{{ cache()->put('docs_token',$tokenValue) }};toastr.success('设置token成功')
-                                        ">CacheToken</a>
-                                </div>
-                            @endforeach
+
+                <span class="input-group-text">{{ $host }}</span>
+                <input type="text" class="form-control" id="url" aria-describedby="basic-addon3">
+                <button class="btn  btn-outline-secondary" onclick="send()" type="button" id="button-addon2">Send
+                </button>
+            </div>
+
+            <div>
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#Params"
+                                type="button" role="tab" aria-controls="Params" aria-selected="true">Params
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#Authorization"
+                                type="button" role="tab" aria-controls="Authorization" aria-selected="false">
+                            Authorization
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#Headers"
+                                type="button" role="tab" aria-controls="Headers" aria-selected="false">Headers
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#Body"
+                                type="button" role="tab" aria-controls="contact" aria-selected="false">Body
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    {{--params--}}
+                    <div class="tab-pane fade show active" id="Params" role="tabpanel" aria-labelledby="home-tab">
+                        <p class="tab-class">Query Params</p>
+                        <form name="params_form" id="params_form">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">KEY</th>
+                                    <th scope="col">VALUE</th>
+                                    <th scope="col">DESCRIPTION</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="td-delete" width="3%" style="text-align: center">
+                                        <button onclick="deleteTr($(this))" class="btn btn-sm btn-delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                    <td><input onchange="inputChange($(this))" placeholder="Key"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td><input placeholder="Value"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td><input placeholder="Description"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td></td>
+                                </tr>
+
+                                </tbody>
+                            </table>
                         </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    {{--Authorization--}}
+                    <div class="tab-pane fade  " id="Authorization" role="tabpanel" aria-labelledby="Authorization-tab">
+                        {{--                        <p class="tab-class">Authorization</p>--}}
+                        <form name="authorization_form" id="authorization_form">
+                            <table class="table table-borderless" style="border-collapse:unset">
+                                <thead>
+                                <tr>
+                                    {{--                                    <th scope="col"></th>--}}
+                                    {{--                                    <th scope="col">TYPE</th>--}}
+                                    {{--                                    <th scope="col">TOKEN</th>--}}
+                                    {{--                                    <th scope="col"></th>--}}
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    {{--                                    <td class="td-delete" width="3%" style="text-align: center">--}}
+                                    {{--                                        <button onclick="deleteTr($(this))" class="btn btn-sm btn-delete">--}}
+                                    {{--                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"--}}
+                                    {{--                                                 fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">--}}
+                                    {{--                                                <path--}}
+                                    {{--                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>--}}
+                                    {{--                                            </svg>--}}
+                                    {{--                                        </button>--}}
+                                    {{--                                    </td>--}}
+                                    <td style="width: 30%;vertical-align:middle;">
+                                        <label for="authorization_type" style="margin-left: 1.5rem">Type</label>
+                                        <button id="authorization_type" style="margin-left: 1.5rem" class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                                data-bs-toggle="dropdown" aria-expanded="false">No Auth
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="Authorization('Bearer ')" data-value="Bearer ">Bearer Token</a></li>
+                                            {{--                                            <li><a class="dropdown-item" href="#">Another action</a></li>--}}
+                                            {{--                                            <li><a class="dropdown-item" href="#">Something else here</a></li>--}}
+
+                                            {{--                                            <li><a class="dropdown-item" href="#">Separated link</a></li>--}}
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <div class="form-floating">
+                                            <textarea class="form-control" placeholder="Token" id="authorization_token" style="height: 100px"></textarea>
+                                            <label for="authorization_token">Token</label>
+                                        </div>
+                                    {{--                                    <td></td>--}}
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+
+                    {{--header--}}
+                    <div class="tab-pane fade" id="Headers" role="tabpanel" aria-labelledby="profile-tab">
+                        <p class="tab-class">Headers</p>
+                        <form name="header_form" id="header_form">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">KEY</th>
+                                    <th scope="col">VALUE</th>
+                                    <th scope="col">DESCRIPTION</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="td-delete" width="3%" style="text-align: center">
+                                        <button onclick="deleteTr($(this))" class="btn btn-sm btn-delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                    <td><input onchange="inputChange($(this))" placeholder="Key"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td><input placeholder="Value"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td><input placeholder="Description"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                    {{--                    Boby--}}
+                    <div class="tab-pane fade" id="Body" role="tabpanel" aria-labelledby="contact-tab">
+                        <p class="tab-class">Body</p>
+                        <form name="body_form" id="body_form">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th scope="col"></th>
+                                    <th scope="col">KEY</th>
+                                    <th scope="col">VALUE</th>
+                                    <th scope="col">DESCRIPTION</th>
+                                    <th scope="col"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="requestBodyTbody">
+                                <tr>
+                                    <td class="td-delete" width="3%" style="text-align: center">
+                                        <button onclick="deleteTr($(this))" class="btn btn-sm btn-delete">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                 fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                <path
+                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </button>
+                                    </td>
+                                    <td><input onchange="inputChange($(this))" placeholder="Key"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td><input placeholder="Value"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td><input placeholder="Description"
+                                               class="form-control docs-input" type="text"></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
+
+            {{--            <hr>--}}
+            <div style="width: 100%;" id="ResponseContent">
+                {{--                <p class="tab-class">Response</p>--}}
+                <div>
+                    <ul class="nav nav-tabs" id="myResponseTab" role="tablist"
+                        style="padding-left: 0.5rem;font-size: 12px">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+                                    data-bs-target="#Response"
+                                    type="button" role="tab" aria-controls="Response" aria-selected="true">Response
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button onclick="showResponse()" class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                    data-bs-target="#status200"
+                                    type="button" role="tab" aria-controls="status200" aria-selected="false">200
+                            </button>
+                        </li>
+
+                    </ul>
+                </div>
+
+
+                <div class="tab-content" id="myResponseTabContent">
+                    <div class="row justify-content-between" style="width: 100%;margin: 0;font-size: 12px">
+                        <div class="col-4">Body</div>
+                        <div class="col-4" id="status">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor"
+                                 class="bi bi-globe" viewBox="0 0 16 16">
+                                <path
+                                    d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm7.5-6.923c-.67.204-1.335.82-1.887 1.855A7.97 7.97 0 0 0 5.145 4H7.5V1.077zM4.09 4a9.267 9.267 0 0 1 .64-1.539 6.7 6.7 0 0 1 .597-.933A7.025 7.025 0 0 0 2.255 4H4.09zm-.582 3.5c.03-.877.138-1.718.312-2.5H1.674a6.958 6.958 0 0 0-.656 2.5h2.49zM4.847 5a12.5 12.5 0 0 0-.338 2.5H7.5V5H4.847zM8.5 5v2.5h2.99a12.495 12.495 0 0 0-.337-2.5H8.5zM4.51 8.5a12.5 12.5 0 0 0 .337 2.5H7.5V8.5H4.51zm3.99 0V11h2.653c.187-.765.306-1.608.338-2.5H8.5zM5.145 12c.138.386.295.744.468 1.068.552 1.035 1.218 1.65 1.887 1.855V12H5.145zm.182 2.472a6.696 6.696 0 0 1-.597-.933A9.268 9.268 0 0 1 4.09 12H2.255a7.024 7.024 0 0 0 3.072 2.472zM3.82 11a13.652 13.652 0 0 1-.312-2.5h-2.49c.062.89.291 1.733.656 2.5H3.82zm6.853 3.472A7.024 7.024 0 0 0 13.745 12H11.91a9.27 9.27 0 0 1-.64 1.539 6.688 6.688 0 0 1-.597.933zM8.5 12v2.923c.67-.204 1.335-.82 1.887-1.855.173-.324.33-.682.468-1.068H8.5zm3.68-1h2.146c.365-.767.594-1.61.656-2.5h-2.49a13.65 13.65 0 0 1-.312 2.5zm2.802-3.5a6.959 6.959 0 0 0-.656-2.5H12.18c.174.782.282 1.623.312 2.5h2.49zM11.27 2.461c.247.464.462.98.64 1.539h1.835a7.024 7.024 0 0 0-3.072-2.472c.218.284.418.598.597.933zM10.855 4a7.966 7.966 0 0 0-.468-1.068C9.835 1.897 9.17 1.282 8.5 1.077V4h2.355z"/>
+                            </svg>
+                            <label for="status_code">Status:</label>
+                            <span id="status_code"></span>
+                            <span id="status_text"></span>
+                            <label for="time" style="margin-left: 10px">Time:</label>
+                            <span id="time"></span>
+                            {{--                                <label for="size" style="margin-left: 10px">Size:</label>--}}
+                            {{--                                <span id="size"></span>--}}
+
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade show active" id="Response" role="tabpanel" aria-labelledby="home-tab">
+                        <div style="width: 100%;margin: 0;padding: 0.5rem">
+                            <pre style="color: #ffffff;background-color: #333333;" class="language-json"
+                                 data-lang="json"
+                                 id="pre"></pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="status200" role="tabpanel" aria-labelledby="home-tab">
+                        <div style="width: 100%;margin: 0;padding: 0.5rem">
+                            <form id="response_table_form">
+                                <table class="table table-borderless" id="response_table">
+                                    <thead>
+                                    <tr>
+
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </form>
+                        </div>
+                        <div style="width: 100%;margin: 0;padding: 0.5rem;text-align: right">
+                            <button onclick="save()" type="button" class="btn btn-secondary">Save</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </main>
     </div>
-</main>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
 <script>
-    var up_id = null;
-
-    $(document).ready(function () {
-        $('.sidebar-nav ul li a').click(function () {
-            var first_li = $(this).parents('li').first();
-            var ul = first_li.children("ul")
-            ul.toggle(10)
-        })
-    });
-
-    function showContent(id){
-        $('#welcome').hide()
-        if (up_id != null){
-            $("div#"+up_id).toggle()
-            $("div#"+up_id).parent('div').children('h3').toggle()
+    function showResponse() {
+        if (!$('#response_table').children('tbody').children('tr').length) {
+            $('#response_table').children('tbody').html(getResponeseHtml(0, 1))
         }
-        $("div#"+id).parent('div').children('h3').toggle()
-        $("div#"+id).toggle()
-        up_id = id;
+
+        // console.log(Math.floor(Math.random() * 100000))
     }
 
 
-    function js_method(id) {
-        var form = $('#' + id).serializeArray()
-        var token = form.find((token) => (token.name == 'authorization')).value
-
-        var findIndex = form.findIndex(function (element) {
-            return element.name == 'authorization'
-        })
-        form.splice(findIndex, 1)
-        var method = $('#' + id + '_method').val().toUpperCase();
-        var uri = $('#' + id + '_uri').val();
-
-        var data = {};
-        window[method](uri, token, form, id)
+    function Authorization(type,token = null){
+        $('#authorization_type').html(type)
+        $('#authorization_type').val(type)
+        $('#authorization_token').attr('name',type)
     }
 
-    function PUT(uri, token, form, id) {
-        var data = '';
-        $.each(form, function (i, v) {
-            if (v.value != '') {
-                data += v.name + '=' + v.value + '&'
-            }
+    function save() {
+        var data = $('#response_table_form').serializeArray()
+        var tbody = $('#response_table').children('tbody').html()
+        // console.log(tbody)
+        var url = $('#url').val()
+        var methods = $('#method_').val()
+        $.post('/docs/save', {"api": url, 'methods': methods, 'data': data, 'tbody': tbody}, function (r) {
+            console.log(r)
         })
-        if (data != '') {
-            data = data.substring(0, data.length - 1)
-            uri = uri + '?' + data
+    }
+
+    function deleteResponseTr(tr) {
+        if (tr.siblings().length) {
+            tr.remove()
         }
-        $.ajax({
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            url: uri,
-            type: 'put',
-            dataType: 'json',
-            mimeType: "multipart/form-data",
-            contentType: 'application/json;charset=UTF-8',
-            success: function (r) {
-                toastr.success(r.message)
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(r));
-            },
-            error: function (r) {
-                if (r.status != 200){
-                    var j = r.responseJSON;
-                    var pre = $('#pre_' + id);
-                    pre.html(syntaxHighlight(j));
-                }
-                if (r.responseJSON != undefined) {
-                    toastr.error(r.responseJSON.message)
-                    var j = r.responseJSON;
-                    var pre = $('#pre_' + id);
-                    pre.html(syntaxHighlight(j));
-                }else{
-                    var pre = $('#pre_' + id);
-                    pre.html(r.responseText);
-                }
-            },
-            complete: function (r) {
-                var collapse = $('#collapse_' + id);
-                collapse.show()
-            }
-        })
     }
 
-    function DELETE(uri, token, form, id) {
-        var data = '';
-        $.each(form, function (i, v) {
-            if (v.value != '') {
-                data += v.name + '=' + v.value + '&'
-            }
-        })
-        if (data != '') {
-            data = data.substring(0, data.length - 1)
-            uri = uri + '?' + data
+    function responseChangeSelect(select) {
+        var select_val = select.val();
+        var tr = select.parents('tr')
+        if (select_val == 'object') {
+            addResponseTr(tr, true)
         }
-        $.ajax({
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            url: uri,
-            type: 'delete',
-            dataType: 'json',
-            mimeType: "multipart/form-data",
-            contentType: 'application/json;charset=UTF-8',
-
-            success: function (r) {
-                toastr.success(r.message)
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(r));
-            },
-            error: function (r) {
-                if (r.status != 200){
-                    var j = r.responseJSON;
-                    var pre = $('#pre_' + id);
-                    pre.html(syntaxHighlight(j));
-                }
-                if (r.responseJSON != undefined) {
-                    toastr.error(r.responseJSON.message)
-                    var j = r.responseJSON;
-                    var pre = $('#pre_' + id);
-                    pre.html(syntaxHighlight(j));
-                }else{
-                    var pre = $('#pre_' + id);
-                    pre.html(r.responseText);
-                }
-            },
-            complete: function (r) {
-                var collapse = $('#collapse_' + id);
-                collapse.show()
-            }
-        })
     }
 
-    function POST(uri, token, form, id) {
-        var data = {}
-        $.each(form, function (i, val) {
-            if (val.value != '' && val.value != ' ') {
-                data[val.name] = val.value;
-            }
+    function addSibling(tr) {
+        addResponseTr(tr)
+    }
 
-        })
-        data = JSON.stringify(data) == '{}' ? '' : JSON.stringify(data)
-        var a = $.ajax({
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            type: 'post',
-            url: uri,
-            dataType: 'json',
-            data: data,
-            mimeType: "multipart/form-data",
-            contentType: 'application/json;charset=UTF-8',
-            success: function (r) {
-                toastr.success(r.message)
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(r));
-            },
-            error: function (r) {
-                if (r.code) {
-                    toastr.error(r.message)
-                    var j = r.responseJSON;
-                    var pre = $('#pre_' + id);
-                    pre.html(syntaxHighlight(j));
+    function addResponseTr(tr, is_children = false) {
+        var level = tr.children('td').first().data('level')
+        if (is_children) {
+            padding_left = level * 15
+            tr.after(getResponeseHtml(padding_left, level + 1))
+
+        } else {
+            padding_left = (level - 1) * 15
+            tr.before(getResponeseHtml(padding_left, level))
+            // tr.after(getResponeseHtml())
+        }
+    }
+
+
+    function getNameRandom() {
+        var time = new Date().getTime()
+        var random = Math.floor(Math.random() * 100000)
+        return time + '_' + random
+    }
+
+    function getResponeseHtml(padding_left, level) {
+        // var ajaxTime = new Date().getTime() + '_'.m;
+        var tdKey = '<td data-level ="' + level + '" style="padding-left: ' + padding_left + 'px"><input name="' + getNameRandom() + '" placeholder="Key" class="form-control" type="text"></td>'
+        var tdSelect = '<td style="width: 20%">' +
+            '<select onchange="responseChangeSelect($(this))" class="form-select" aria-label="Default select example" name="' + getNameRandom() + '">' +
+            '<option value="object">object</option>' +
+            '<option value="string" selected>string</option>' +
+            '<option value="integer">integer</option>' +
+            '<option value="array">array</option>' +
+            '<option value="boolean">boolean</option>' +
+            '<option value="null">null</option>' +
+            '<option value="any" >any</option>' +
+            '</select></td>'
+        var tdDesc = '<td style="width: 25%"><input name="' + getNameRandom() + '" placeholder="说明" class="form-control" type="text"></td>'
+        var buttonGroup = '<td style="width: 1%">' +
+            '<div class="btn-group me-2" role="group" aria-label="First group">' +
+            '<button onclick="deleteResponseTr($(this).parents(\'tr\'))" type="button" class="btn btn-outline-secondary" >' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16"> ' +
+            '<path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>' +
+            '<path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>' +
+            '</svg>' +
+            '</button>' +
+            '<button onclick="addSibling($(this).parents(\'tr\'))" type="button" class="btn btn-outline-secondary"  title="添加同节点"> ' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"> ' +
+            '<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/> ' +
+            '</svg></button></div></td>'
+        return html = '<tr class="level_' + level + '">' + tdKey + tdSelect + tdDesc + buttonGroup + '</tr>'
+    }
+
+    /**
+     *
+     * @param tr
+     */
+    function inputChange(tr) {
+        var a = tr.parents("tr")
+        var next_input = tr.parents("td").next().children('input')
+        next_input.attr('name', tr.val())
+        if (!endLine(a)) {
+            var html = addTr()
+            a.after(html)
+        }
+    }
+
+    /**
+     * 添加tr
+     * @returns {string}
+     */
+    function addTr(key = '', value = '', type = '', desc = '') {
+        var firstBtn = '<td class="td-delete" width="3%" style="text-align: center"><button onclick="deleteTr($(this))" class="btn btn-sm btn-delete"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16"><path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/></svg></button></td>'
+        var tdKey = '<td><input onchange="inputChange($(this))" placeholder="Key" class="form-control docs-input" type="text"  value="' + key + '"></td>'
+        var tdValue = '<td><input  placeholder="Value" class="form-control docs-input" type="text" name="' + key + '" value="' + value + '">'
+        var tdDescription = '<td><input  placeholder="Description" class="form-control docs-input" type="text" value="' + desc + '"></td>'
+        var tdEnd = '<td></td>'
+        return "<tr>" + firstBtn + tdKey + tdValue + tdDescription + tdEnd + "</tr>"
+    }
+
+    /**
+     * 删除tr
+     * @param button
+     */
+    function deleteTr(button) {
+        var tr = button.parents("tr")
+        if (endLine(tr)) {
+            console.log("tr remove")
+            tr.remove()
+        }
+    }
+
+    /**
+     * 判断是否是最后一行tr
+     * @param tr
+     * @returns {*}
+     */
+    function endLine(tr) {
+        // console.log(tr.next())
+        return tr.next().length
+    }
+
+    /**
+     *
+     * @param v
+     */
+    function getApiDocsDetail(url, methods) {
+        $('#pre').empty();
+        $.post('/docs/detail', {"api": url, 'methods': methods}, function (rep) {
+            $('#contact-tab').click()
+            var tr = $('#requestBodyTbody').children('tr')
+            tr.remove()
+            $('#requestBodyTbody').html(addTr())
+            var new_tr = $('#requestBodyTbody').children('tr')
+            if (rep.annotation) {
+                if (rep.annotation.Title.title) {
+                    $('#title').html(rep.annotation.Title.title)
+                }
+                if (rep.annotation.author) {
+                    $('#author').html(rep.annotation.author)
+                }
+                if (rep.annotation.RequestBody) {
+
+                    for (const repKey in rep.annotation.RequestBody) {
+                        var key = rep.annotation.RequestBody[repKey].key
+                        var value = rep.annotation.RequestBody[repKey].value
+                        var desc = rep.annotation.RequestBody[repKey].desc
+                        var type = rep.annotation.RequestBody[repKey].type
+                        var html = addTr(key, value ?? '', type ?? '', desc ?? '')
+                        new_tr.before(html)
+                    }
+                } else if (rep.request) {
+
+                    for (const repKey in rep.request) {
+                        var key = repKey
+                        var desc = rep.request[repKey]
+                        var html = addTr(key, value ?? '', type ?? '', desc ?? '')
+                        new_tr.before(html)
+                    }
                 } else {
-                    var pre = $('#pre_' + id);
-                    pre.html(r.responseText);
+                    var tr = $('#requestBodyTbody').children('tr')
+                    tr.remove()
+                    $('#requestBodyTbody').html(addTr())
                 }
-
-            },
-            complete: function (r) {
-                var collapse = $('#collapse_' + id);
-                collapse.show()
+            }
+            if (rep.methods) {
+                method_chonge(rep.methods[0])
+            }
+            if (rep.url) {
+                $('#url').val(rep.url)
+            }
+            if (rep.response_table_tbody) {
+                $('#response_table').children('tbody').html(rep.response_table_tbody.tbody)
+                var data = rep.response_table_tbody.data
+                for (const dataKey in data) {
+                    // console.log(data[dataKey].value)
+                    $('[name="' + data[dataKey].name + '"]').val(data[dataKey].value)
+                }
+            } else {
+                $('#response_table').children('tbody').children('tr').remove()
+                $('#response_table').children('tbody').html(getResponeseHtml(0, 1))
             }
         })
     }
 
-    function GET(uri, token, form, id) {
-        var data = '';
-        $.each(form, function (i, v) {
-            if (v.value != '') {
-                data += v.name + '=' + v.value + '&'
-            }
-        })
-        if (data != '') {
-            data = data.substring(0, data.length - 1)
-            uri = uri + '?' + data
-        }
+    /**
+     * 发送请求
+     */
+    function send() {
+        var method = $('#method_').val()
+        var url = '{{ $host }}' + $('#url').val()
+
+        var headers = $('#header_form').serializeJSON()
+        var body_data = $('#body_form').serialize()
+
+        var authorization_data = $('#authorization_form').serializeJSON();
+        var headers_data = Object.assign(headers, authorization_data);
+
+
+        request(url, headers_data, body_data, method)
+    }
+
+    /**
+     *
+     * @param url
+     * @param headers
+     * @param body_data
+     * @constructor
+     */
+    function request(url, headers, body_data, method) {
+        var ajaxTime = new Date().getTime();
         $.ajax({
-            headers: {
-                "Authorization": "Bearer " + token
-            },
-            url: uri,
-            type: 'get',
+            headers: headers,
+            url: url,
+            type: method,
+            data: body_data,
             dataType: 'json',
-            mimeType: "multipart/form-data",
-            contentType: 'application/json;charset=UTF-8',
             success: function (r) {
-                toastr.success(r.message)
-                var pre = $('#pre_' + id);
-                pre.html(syntaxHighlight(r));
+
             },
             error: function (r) {
-
-                if (r.responseJSON) {
-                    toastr.error(r.responseJSON.message)
-                    var j = r.responseJSON;
-                    var pre = $('#pre_' + id);
-                    pre.html(syntaxHighlight(j));
-                } else {
-                    var pre = $('#pre_' + id);
-                    pre.html(r.responseText);
-                }
+                console.log('error')
             },
             complete: function (r) {
-                var collapse = $('#collapse_' + id);
-                collapse.show()
+                setsStatusText(r)
+                setTime(ajaxTime)
+                var pre = $('#pre');
+                pre.html(syntaxHighlight(r.responseJSON));
+
             }
         })
     }
 
+
+    /**
+     *
+     * @param r
+     */
+    function setsStatusText(r) {
+        var status = r.status
+        var statusText = r.statusText
+        $('#status_code').html(status)
+        $('#status_text').html(statusText)
+    }
+
+
+    /**
+     *
+     * @param time
+     */
+    function setTime(ajaxTime) {
+        var totalTime = new Date().getTime() - ajaxTime;
+        $('#time').html(totalTime + 'ms')
+    }
+
+
+    /**
+     *
+     * @param json
+     * @returns {string}
+     */
     function syntaxHighlight(json) {
         if (typeof json != 'string') {
             json = JSON.stringify(json, undefined, 2);
@@ -686,10 +864,14 @@ public function login(AuthLoginRequest $request): Response
         });
     }
 
-    function deleteRow(row){
-        row.parent().parent().remove();
+    /**
+     *
+     * @param method
+     */
+    function method_chonge(method) {
+        $('#method_').html(method)
+        $('#method_').val(method)
     }
-
 </script>
 </body>
 </html>
