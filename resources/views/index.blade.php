@@ -381,7 +381,7 @@
                                                 data-bs-toggle="dropdown" aria-expanded="false">No Auth
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="Authorization('Bearer ')" data-value="Bearer ">Bearer Token</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="Authorization('Bearer')" id="Bearer" data-value="Bearer">Bearer Token</a></li>
                                             {{--                                            <li><a class="dropdown-item" href="#">Another action</a></li>--}}
                                             {{--                                            <li><a class="dropdown-item" href="#">Something else here</a></li>--}}
 
@@ -389,10 +389,10 @@
                                         </ul>
                                     </td>
                                     <td>
-                                        <div class="form-floating">
-                                            <textarea class="form-control" placeholder="Token" id="authorization_token" style="height: 100px"></textarea>
-                                            <label for="authorization_token">Token</label>
-                                        </div>
+                                        {{--                                        <div class="form-floating">--}}
+                                        <textarea name="Authorization" class="form-control" placeholder="Token" id="authorization_token" style="height: 100px"></textarea>
+                                    {{--                                            <label for="authorization_token">Token</label>--}}
+                                    {{--                                        </div>--}}
                                     {{--                                    <td></td>--}}
                                 </tr>
 
@@ -573,7 +573,7 @@
     function Authorization(type,token = null){
         $('#authorization_type').html(type)
         $('#authorization_type').val(type)
-        $('#authorization_token').attr('name',type)
+        $('#authorization_token').attr('value',type)
     }
 
     function save() {
@@ -708,7 +708,10 @@
      * @param v
      */
     function getApiDocsDetail(url, methods) {
-        $('#pre').empty();
+        $('#pre').empty()
+        $('#status_code').empty()
+        $('#status_text').empty()
+        $('#time').empty()
         $.post('/docs/detail', {"api": url, 'methods': methods}, function (rep) {
             $('#contact-tab').click()
             var tr = $('#requestBodyTbody').children('tr')
@@ -774,15 +777,28 @@
         var url = '{{ $host }}' + $('#url').val()
 
         var headers = $('#header_form').serializeJSON()
-        var body_data = $('#body_form').serialize()
+        var body_data = $('#body_form').serializeJSON()
 
         var authorization_data = $('#authorization_form').serializeJSON();
+        for (const authorizationDataKey in authorization_data) {
+            var value = $('#authorization_token').attr('value')
+            authorization_data[authorizationDataKey] = value+' '+authorization_data[authorizationDataKey]
+        }
+        console.log(authorization_data)
         var headers_data = Object.assign(headers, authorization_data);
-
-
+        body_data = unsetBodyData(body_data)
         request(url, headers_data, body_data, method)
     }
 
+    function unsetBodyData(body_data){
+        for (const bodyDataKey in body_data) {
+            if(body_data[bodyDataKey] == '' || body_data[bodyDataKey] == undefined){
+                delete body_data[bodyDataKey]
+            }
+        }
+        console.log(body_data)
+        return body_data
+    }
     /**
      *
      * @param url
