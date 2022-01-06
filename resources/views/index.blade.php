@@ -818,18 +818,18 @@
 
             },
             error: function (r) {
+
+            },
+            complete: function (r) {
+                setsStatusText(r)
+                setTime(ajaxTime)
+
                 var pre = $('#pre');
                 if (r.responseJSON) {
                     pre.html(syntaxHighlight(r.responseJSON));
                 } else {
                     pre.html(r.responseText);
                 }
-            },
-            complete: function (r) {
-                setsStatusText(r)
-                setTime(ajaxTime)
-                var pre = $('#pre');
-                pre.html(syntaxHighlight(r.responseJSON));
 
             }
         })
