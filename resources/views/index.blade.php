@@ -818,7 +818,12 @@
 
             },
             error: function (r) {
-                console.log('error')
+                var pre = $('#pre');
+                if (r.responseJSON) {
+                    pre.html(syntaxHighlight(r.responseJSON));
+                } else {
+                    pre.html(r.responseText);
+                }
             },
             complete: function (r) {
                 setsStatusText(r)
