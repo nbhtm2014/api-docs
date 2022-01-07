@@ -377,11 +377,14 @@
                                     {{--                                    </td>--}}
                                     <td style="width: 30%;vertical-align:middle;">
                                         <label for="authorization_type" style="margin-left: 1.5rem">Type</label>
-                                        <button id="authorization_type" style="margin-left: 1.5rem" class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                        <button id="authorization_type" style="margin-left: 1.5rem"
+                                                class="btn btn-outline-secondary dropdown-toggle" type="button"
                                                 data-bs-toggle="dropdown" aria-expanded="false">No Auth
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="javascript:void(0);" onclick="Authorization('Bearer')" id="Bearer" data-value="Bearer">Bearer Token</a></li>
+                                            <li><a class="dropdown-item" href="javascript:void(0);"
+                                                   onclick="Authorization('Bearer')" id="Bearer" data-value="Bearer">Bearer
+                                                    Token</a></li>
                                             {{--                                            <li><a class="dropdown-item" href="#">Another action</a></li>--}}
                                             {{--                                            <li><a class="dropdown-item" href="#">Something else here</a></li>--}}
 
@@ -390,7 +393,8 @@
                                     </td>
                                     <td>
                                         {{--                                        <div class="form-floating">--}}
-                                        <textarea name="Authorization" class="form-control" placeholder="Token" id="authorization_token" style="height: 100px"></textarea>
+                                        <textarea name="Authorization" class="form-control" placeholder="Token"
+                                                  id="authorization_token" style="height: 100px"></textarea>
                                     {{--                                            <label for="authorization_token">Token</label>--}}
                                     {{--                                        </div>--}}
                                     {{--                                    <td></td>--}}
@@ -561,6 +565,9 @@
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
 <script>
+
+    var responseData = {}
+
     function showResponse() {
         if (!$('#response_table').children('tbody').children('tr').length) {
             $('#response_table').children('tbody').html(getResponeseHtml(0, 1))
@@ -570,10 +577,10 @@
     }
 
 
-    function Authorization(type,token = null){
+    function Authorization(type, token = null) {
         $('#authorization_type').html(type)
         $('#authorization_type').val(type)
-        $('#authorization_token').attr('value',type)
+        $('#authorization_token').attr('value', type)
     }
 
     function save() {
@@ -588,15 +595,56 @@
     }
 
     function deleteResponseTr(tr) {
+        var trId = tr.attr('id')
+        if (responseData[trId] != undefined) {
+            delete responseData[trId]
+        }
         if (tr.siblings().length) {
             tr.remove()
         }
+
+    }
+
+    /**
+     *
+     * @param input
+     */
+    function responseChangeKey(input) {
+        var trId = input.parents('tr').attr('id')
+
+        if (responseData[trId] == undefined) {
+            responseData[trId] = {'key': input.val()}
+        } else {
+            responseData[trId]['key'] = input.val()
+        }
+        if(input.parents('tr').data('for')){
+            responseData[trId]['for'] = input.parents('tr').data('for')
+        }
+
+        console.log(responseData)
+    }
+
+
+    function responseChangeDesc(input) {
+        var trId = input.parents('tr').attr('id')
+
+        if (responseData[trId] == undefined) {
+            responseData[trId] = {'desc': input.val()}
+        } else {
+            responseData[trId]['desc'] = input.val()
+        }
+        if(input.parents('tr').data('for')){
+            responseData[trId]['for'] = input.parents('tr').data('for')
+        }
+
+        console.log(responseData)
     }
 
     function responseChangeSelect(select) {
         var select_val = select.val();
         var tr = select.parents('tr')
         if (select_val == 'object') {
+
             addResponseTr(tr, true)
         }
     }
@@ -609,11 +657,11 @@
         var level = tr.children('td').first().data('level')
         if (is_children) {
             padding_left = level * 15
-            tr.after(getResponeseHtml(padding_left, level + 1))
+            tr.after(getResponeseHtml(padding_left, level + 1,tr))
 
         } else {
             padding_left = (level - 1) * 15
-            tr.before(getResponeseHtml(padding_left, level))
+            tr.before(getResponeseHtml(padding_left, level,tr))
             // tr.after(getResponeseHtml())
         }
     }
@@ -625,9 +673,17 @@
         return time + '_' + random
     }
 
-    function getResponeseHtml(padding_left, level) {
-        // var ajaxTime = new Date().getTime() + '_'.m;
-        var tdKey = '<td data-level ="' + level + '" style="padding-left: ' + padding_left + 'px"><input name="' + getNameRandom() + '" placeholder="Key" class="form-control" type="text"></td>'
+    function getResponeseHtml(padding_left, level,tr) {
+        if (level > 1) {
+            var trId = tr.attr('id')
+            var dataFor = 'data-for="' + trId + '"'
+            var tr = '<tr class="level_' + level + '" ' + dataFor + ' id="' + getNameRandom() + '">'
+
+        } else {
+            var tr = '<tr class="level_' + level + '" id="' + getNameRandom() + '">'
+
+        }
+        var tdKey = '<td data-level ="' + level + '" style="padding-left: ' + padding_left + 'px"><input onchange="responseChangeKey($(this))" name="' + getNameRandom() + '"  placeholder="Key" class="form-control" type="text"></td>'
         var tdSelect = '<td style="width: 20%">' +
             '<select onchange="responseChangeSelect($(this))" class="form-select" aria-label="Default select example" name="' + getNameRandom() + '">' +
             '<option value="object">object</option>' +
@@ -638,7 +694,7 @@
             '<option value="null">null</option>' +
             '<option value="any" >any</option>' +
             '</select></td>'
-        var tdDesc = '<td style="width: 25%"><input name="' + getNameRandom() + '" placeholder="说明" class="form-control" type="text"></td>'
+        var tdDesc = '<td style="width: 25%"><input onchange="responseChangeDesc($(this))" name="' + getNameRandom() + '" placeholder="说明" class="form-control" type="text"></td>'
         var buttonGroup = '<td style="width: 1%">' +
             '<div class="btn-group me-2" role="group" aria-label="First group">' +
             '<button onclick="deleteResponseTr($(this).parents(\'tr\'))" type="button" class="btn btn-outline-secondary" >' +
@@ -651,7 +707,7 @@
             '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus" viewBox="0 0 16 16"> ' +
             '<path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/> ' +
             '</svg></button></div></td>'
-        return html = '<tr class="level_' + level + '">' + tdKey + tdSelect + tdDesc + buttonGroup + '</tr>'
+        return html = tr + tdKey + tdSelect + tdDesc + buttonGroup + '</tr>'
     }
 
     /**
@@ -749,6 +805,10 @@
                     $('#requestBodyTbody').html(addTr())
                 }
             }
+            if(rep.token){
+                Authorization('Bearer')
+                $('#authorization_token').val(rep.token)
+            }
             if (rep.methods) {
                 method_chonge(rep.methods[0])
             }
@@ -782,7 +842,7 @@
         var authorization_data = $('#authorization_form').serializeJSON();
         for (const authorizationDataKey in authorization_data) {
             var value = $('#authorization_token').attr('value')
-            authorization_data[authorizationDataKey] = value+' '+authorization_data[authorizationDataKey]
+            authorization_data[authorizationDataKey] = value + ' ' + authorization_data[authorizationDataKey]
         }
         console.log(authorization_data)
         var headers_data = Object.assign(headers, authorization_data);
@@ -790,15 +850,16 @@
         request(url, headers_data, body_data, method)
     }
 
-    function unsetBodyData(body_data){
+    function unsetBodyData(body_data) {
         for (const bodyDataKey in body_data) {
-            if(body_data[bodyDataKey] == '' || body_data[bodyDataKey] == undefined){
+            if (body_data[bodyDataKey] == '' || body_data[bodyDataKey] == undefined) {
                 delete body_data[bodyDataKey]
             }
         }
         console.log(body_data)
         return body_data
     }
+
     /**
      *
      * @param url
@@ -818,6 +879,7 @@
 
             },
             error: function (r) {
+                // var pre = $('#pre');
 
             },
             complete: function (r) {
@@ -830,6 +892,7 @@
                 } else {
                     pre.html(r.responseText);
                 }
+                // pre.html(syntaxHighlight(r.responseJSON));
 
             }
         })

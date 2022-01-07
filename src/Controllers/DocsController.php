@@ -117,6 +117,14 @@ class DocsController
         if (Cache::store('file')->has($request->methods.$request->api)){
             $request_['response_table_tbody'] = Cache::store('file')->get($request->methods.$request->api);
         }
+        $ttl = config('jwt.ttl');
+        if (Cache::store('file')->has('api.doc.token')){
+            $token = Cache::store('file')->get('api.doc.token');
+        }else{
+            $token = $this->getToken();
+            Cache::store('file')->put('api.doc.token',$token,$ttl);
+        }
+        $request_['token'] = $token[array_key_first($token)];
         return $request_;
     }
 
@@ -125,7 +133,6 @@ class DocsController
         $method = $request->methods;
         $data = $request->data;
         $tbody = $request->tbody;
-
         $data = ['data'=>$data,'tbody'=>$tbody];
         Cache::store('file')->put($method.$api,$data);
     }
