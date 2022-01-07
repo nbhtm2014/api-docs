@@ -163,11 +163,11 @@
         }
 
         .POST {
-            color: #FFD700;
+            color: #f8be40;
         }
 
         .GET {
-            color: green;
+            color: #8bc6af;
         }
 
         .DELETE {
@@ -175,7 +175,7 @@
         }
 
         .PUT {
-            color: #0d6efd;
+            color: #6ac5cd;
         }
 
         #myResponseTab button {
