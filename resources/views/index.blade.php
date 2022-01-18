@@ -32,6 +32,11 @@
 
         }
 
+        .blockquote-footer {
+            margin-bottom: 0.25rem !important;
+            margin-top:0.25rem;
+        }
+
         .b-example-divider {
             flex-shrink: 0;
             width: 1.5rem;
@@ -263,6 +268,9 @@
             {{--title--}}
             <div style="padding: 0.5rem">
                 <h5 id="title"></h5>
+                <figcaption class="blockquote-footer" style="display: none">
+
+                </figcaption>
                 <span id="author" class="badge rounded-pill bg-dark"></span>
             </div>
 
@@ -358,23 +366,12 @@
                             <table class="table table-borderless" style="border-collapse:unset">
                                 <thead>
                                 <tr>
-                                    {{--                                    <th scope="col"></th>--}}
-                                    {{--                                    <th scope="col">TYPE</th>--}}
-                                    {{--                                    <th scope="col">TOKEN</th>--}}
-                                    {{--                                    <th scope="col"></th>--}}
+
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    {{--                                    <td class="td-delete" width="3%" style="text-align: center">--}}
-                                    {{--                                        <button onclick="deleteTr($(this))" class="btn btn-sm btn-delete">--}}
-                                    {{--                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"--}}
-                                    {{--                                                 fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">--}}
-                                    {{--                                                <path--}}
-                                    {{--                                                    d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>--}}
-                                    {{--                                            </svg>--}}
-                                    {{--                                        </button>--}}
-                                    {{--                                    </td>--}}
+
                                     <td style="width: 30%;vertical-align:middle;">
                                         <label for="authorization_type" style="margin-left: 1.5rem">Type</label>
                                         <button id="authorization_type" style="margin-left: 1.5rem"
@@ -385,19 +382,12 @@
                                             <li><a class="dropdown-item" href="javascript:void(0);"
                                                    onclick="Authorization('Bearer')" id="Bearer" data-value="Bearer">Bearer
                                                     Token</a></li>
-                                            {{--                                            <li><a class="dropdown-item" href="#">Another action</a></li>--}}
-                                            {{--                                            <li><a class="dropdown-item" href="#">Something else here</a></li>--}}
-
-                                            {{--                                            <li><a class="dropdown-item" href="#">Separated link</a></li>--}}
                                         </ul>
                                     </td>
                                     <td>
-                                        {{--                                        <div class="form-floating">--}}
                                         <textarea name="Authorization" class="form-control" placeholder="Token"
                                                   id="authorization_token" style="height: 100px"></textarea>
-                                    {{--                                            <label for="authorization_token">Token</label>--}}
-                                    {{--                                        </div>--}}
-                                    {{--                                    <td></td>--}}
+
                                 </tr>
 
                                 </tbody>
@@ -589,8 +579,9 @@
         // console.log(tbody)
         var url = $('#url').val()
         var methods = $('#method_').val()
-        $.post('/docs/save', {"api": url, 'methods': methods, 'data': data, 'tbody': tbody}, function (r) {
-            console.log(r)
+        var response_data =  responseData
+        $.post('/docs/save', {"response_data" : response_data,"api": url, 'methods': methods, 'data': data, 'tbody': tbody}, function (r) {
+            // console.log(r)
         })
     }
 
@@ -602,7 +593,6 @@
         if (tr.siblings().length) {
             tr.remove()
         }
-
     }
 
     /**
@@ -625,6 +615,12 @@
     }
 
 
+
+
+    /**
+     *
+     * @param input
+     */
     function responseChangeDesc(input) {
         var trId = input.parents('tr').attr('id')
 
@@ -662,7 +658,6 @@
         } else {
             padding_left = (level - 1) * 15
             tr.before(getResponeseHtml(padding_left, level,tr))
-            // tr.after(getResponeseHtml())
         }
     }
 
@@ -768,7 +763,11 @@
         $('#status_code').empty()
         $('#status_text').empty()
         $('#time').empty()
+        responseData = {}
         $.post('/docs/detail', {"api": url, 'methods': methods}, function (rep) {
+            //tags-list
+            // addTag(rep)
+
             $('#contact-tab').click()
             var tr = $('#requestBodyTbody').children('tr')
             tr.remove()
@@ -777,6 +776,12 @@
             if (rep.annotation) {
                 if (rep.annotation.Title.title) {
                     $('#title').html(rep.annotation.Title.title)
+                }
+                if(rep.annotation.Title.desc){
+                    $('.blockquote-footer').show()
+                    $('.blockquote-footer').html(rep.annotation.Title.desc)
+                }else{
+                    $('.blockquote-footer').hide()
                 }
                 if (rep.annotation.author) {
                     $('#author').html(rep.annotation.author)
